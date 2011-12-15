@@ -10,7 +10,7 @@ setup(
     install_requires = ["fabric", "cuisine"],
     packages = find_packages(),
     author = "Michael Contento",
-    author_email = "michaelcontento@gmail.com"
+    author_email = "michaelcontento@gmail.com",
     url = "https://github.com/michaelcontento/revolver",
     keywords = ["fabric", "cuisine", "chef", "puppet", "ssh"],
     description = "Pythonic server orchestrating based on fabric / cuisine",
