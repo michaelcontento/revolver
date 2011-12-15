@@ -1,0 +1,28 @@
+# -*- coding: utf-8 -*- 
+
+from __future__ import with_statement
+
+from revolver import command
+from revolver import contextmanager as ctx
+from revolver import directory as dir
+from revolver import package
+from revolver.core import sudo, run
+
+def install():
+    package.ensure([
+        'git-core', 'curl', 'build-essential'
+    ])
+    tmpdir = dir.temp()
+
+    try:
+        with ctx.cd(tmpdir):
+            run('git clone git://github.com/sstephenson/ruby-build.git ./ --depth 1')
+            sudo('./install.sh')
+    finally:
+        dir.remove(tmpdir, recursive=True)
+
+def ensure():
+    if command.exists('ruby-build'):
+        return
+
+    install()
