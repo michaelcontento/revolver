@@ -50,9 +50,7 @@ new batteries included.
 This project is currently not published to the official python package 
 repository but it should be easy to get everything running:
 
-1. `git clone git@github.com:michaelcontento/revolver.git`
-2. `(cd revolver && sudo easy_install .)`
-3. Done :) 
+    sudo easy_install https://github.com/michaelcontento/revolver/tarball/master
 
 Now [Revolver][] is installed and ready to use. But I would suggest to 
 first read the documentation from [Fabric][] to get used with the whole 
