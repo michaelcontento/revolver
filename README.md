@@ -29,14 +29,14 @@ incompatible. Some examples?
         run('apt-get install XYZ')
 
 I really enjoy the contextmanager for running a block as superuser! But 
-[Cuisine][] didn't patch all commands provided by [Fabric][] (*run* in the 
-example is patched but *put* isn't, so you run into strange / annoying 
-errors). 
+[Cuisine][] didn't patch all commands provided by [Fabric][] (`run()` in the 
+example is patched but other commands, like `put()`, aren't and you'll run into 
+strange / annoying errors). 
 
 There is also a different scheme of naming things. [Fabric][] tends to use short 
-function names inside clean namespaces (e.g *fabric.contrib.files.append*). 
-But the API of [Cuisine][], on the other hand, follows *\<object>_\<operation>* 
-(e.g. *cuisine.file_append*). 
+function names inside clean namespaces (e.g `fabric.contrib.files.append`). 
+But the API of [Cuisine][], on the other hand, follows `<object>_<operation>`
+(e.g. `cuisine.file_append`). 
 
 Both ways are reasonable and I don't wanna blame someone! Don't get me wrong!
 I simply want a "cleaner" or "more compatible" API which I can extend with my
@@ -47,7 +47,40 @@ new batteries included.
 
 ## Getting started
 
-*TODO*
+This project is currently not published to the official python package 
+repository but it should be easy to get everything running:
+
+1. `git clone git@github.com:michaelcontento/revolver.git`
+2. `(cd revolver && sudo easy_install .)`
+3. Done :) 
+
+Now [Revolver][] is installed and ready to use. But I would suggest to 
+first read the documentation from [Fabric][] to get used with the whole 
+workflow / principle. After that it should be easy for you to dig into the 
+code, discover everything and write your first own `fabfile.py`. 
+
+## Example
+
+But for those who want to see fast results, here is a small example 
+`fabfile.py`.
+
+    # -*- coding: utf-8 -*-
+
+    from revolver import project
+    from revolver import user
+    from revolver.core import env
+    from revolver.tool import php
+    from revolver.tool import ruby
+
+    env.hosts = ['user@example.com']
+
+    def setup():
+        php.ensure()
+        ruby.ensure()
+        user.ensure('own-user', home='/var/own-user')
+        
+    def deploy():
+        project.deploy(owner='own-user')
 
 ## Contributing
 
