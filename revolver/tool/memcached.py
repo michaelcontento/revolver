@@ -7,7 +7,7 @@ def install():
     package.install('memcached')
 
 def ensure():
-    if command.exists('memcached')
+    if command.exists('memcached'):
         return
 
     install()
