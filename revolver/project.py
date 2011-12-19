@@ -20,12 +20,13 @@ def deploy(owner, upload_hook=None, revision='HEAD', keep_versions=10):
     # Ensure some directories
     paths = _ensure_layout(owner)
     new_release_dir = _create_new_release_dir(owner, paths['releases'])
+    paths['new_release'] = new_release_dir
 
     # Upload the new version and call the after upload hook
     _upload(owner, new_release_dir, revision)
     if upload_hook:
         with ctx.sudo(owner), ctx.cd(new_release_dir):
-            upload_hook()
+            upload_hook(owner, paths)
 
     # Activate the new release and 
     _symlink_release(owner, paths['current'], new_release_dir)
