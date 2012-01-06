@@ -24,8 +24,9 @@ def install():
     www_dir = '/var/www'
     www_owner = 'www-data'
     if not dir.exists(www_dir):
-        dir.create(www_dir)
-        dir.attributes(www_dir, owner=www_owner, group=www_owner)
+        with ctx.sudo():
+            dir.create(www_dir)
+            dir.attributes(www_dir, owner=www_owner, group=www_owner)
 
     restart()
 
