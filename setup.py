@@ -1,12 +1,19 @@
 #!/usr/bin/env python
 
+import os
+import re
+
 from distutils.core import setup
 
-from revolver.core import version
+# Extract the current version
+# Based on: https://github.com/brosner/sqlalchemy/blob/master/setup.py#L12-14
+v = file(os.path.join(os.path.dirname(__file__), 'revolver', 'core.py'))
+VERSION = re.compile(r".*version = '(.*?)'", re.S).match(v.read()).group(1)
+v.close()
 
 setup(
     name='revolver',
-    version=version,
+    version=VERSION,
     author='Michael Contento',
     author_email='michaelcontento@gmail.com',
     packages=['revolver', 'revolver.test'],
