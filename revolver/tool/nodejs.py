@@ -12,14 +12,13 @@ _VERSION = 'v0.6'
 _OPTIONS = ''
 
 def install(version=_VERSION, options=_OPTIONS):
-    package.ensure([
-        'git-core', 'libssl-dev', 'curl', 'build-essential'
-    ])
+    package.ensure(['git-core', 'libssl-dev', 'curl', 'build-essential'])
     tmpdir = dir.temp()
 
     try:
         with ctx.cd(tmpdir):
-            run('git clone git://github.com/joyent/node.git ./ --depth 1')
+            repo = 'git://github.com/joyent/node.git' 
+            run('git clone %s ./ --depth 1' % repo)
             run('git checkout %s' % version)
             run('./configure %s' % options)
             run('make > /dev/null')

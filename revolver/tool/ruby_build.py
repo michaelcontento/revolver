@@ -9,14 +9,13 @@ from revolver import package
 from revolver.core import sudo, run
 
 def install():
-    package.ensure([
-        'git-core', 'curl', 'build-essential'
-    ])
+    package.ensure(['git-core', 'curl', 'build-essential'])
     tmpdir = dir.temp()
 
     try:
         with ctx.cd(tmpdir):
-            run('git clone git://github.com/sstephenson/ruby-build.git ./ --depth 1')
+            repo = 'git://github.com/sstephenson/ruby-build.git'
+            run('git clone %s ./ --depth 1' % repo)
             sudo('./install.sh')
     finally:
         dir.remove(tmpdir, recursive=True)
