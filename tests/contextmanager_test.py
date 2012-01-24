@@ -4,7 +4,7 @@ from fabric import context_managers as old_ctx
 
 from revolver import contextmanager as new_ctx
 
-def test_revolver_just_wrapps_fabric():
+def test_revolver_is_just_a_wrapper():
     assert new_ctx.cd == old_ctx.cd
     assert new_ctx.hide == old_ctx.hide
     assert new_ctx.lcd == old_ctx.lcd

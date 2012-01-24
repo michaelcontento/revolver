@@ -7,7 +7,7 @@ from cuisine import file_attribs_get as cuisine_attributes_get
 
 from revolver import directory
 
-def test_revolver_just_wrapps_cuisine():
+def test_revolver_is_just_a_wrapper():
     assert directory.attributes == cuisine_attributes
     assert directory.attributes_get == cuisine_attributes_get
     assert directory.ensure == cuisine_ensure

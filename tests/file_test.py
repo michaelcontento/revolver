@@ -9,7 +9,7 @@ from cuisine import file_write as cuisine_write
 
 from revolver import file
 
-def test_revolver_just_wrapps_cuisine():
+def test_revolver_is_just_a_wrapper():
     assert file.attributes == cuisine_attributes
     assert file.attributes_get == cuisine_attributes_get
     assert file.read == cuisine_read

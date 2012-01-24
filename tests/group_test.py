@@ -9,7 +9,7 @@ from cuisine import group_user_ensure as cuisine_user_ensure
 
 from revolver import group
 
-def test_revolver_just_wrapps_cuisine():
+def test_revolver_is_just_a_wrapper():
     assert group.get == cuisine_get
     assert group.create == cuisine_create
     assert group.ensure == cuisine_ensure
