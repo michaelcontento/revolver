@@ -15,7 +15,7 @@ setup(
     description='Pythonic server orchestrating based on fabric / cuisine',
     long_description=open('README.md').read(),
     keywords=['fabric', 'cuisine', 'chef', 'puppet', 'ssh'],
-    install_requires=['fabric >= 1.3', 'cuisine >= 0.1'],
+    requires=['fabric (>= 1.3)', 'cuisine (>= 0.1)'],
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Environment :: Console',
