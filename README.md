@@ -52,6 +52,10 @@ repository but it should be easy to get everything running:
 
     sudo easy_install https://github.com/michaelcontento/revolver/tarball/master
 
+Or use the new alternate installer [Pip][]:
+
+    sudo pip https://github.com/michaelcontento/revolver/tarball/master#egg=revolver
+
 Now [Revolver][] is installed and ready to use. But I would suggest to 
 first read the documentation from [Fabric][] to get used with the whole 
 workflow / principle. After that it should be easy for you to dig into the 
@@ -107,6 +111,7 @@ skip everything after step two :)
     See the License for the specific language governing permissions and
     limitations under the License.
 
+  [Pip]: http://www.pip-installer.org
   [Cuisine]: https://github.com/sebastien/cuisine
   [Fabric]: https://github.com/fabric/fabric
   [Python]: http://python.org
