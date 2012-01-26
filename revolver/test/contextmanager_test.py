@@ -19,16 +19,21 @@ def test_sudo_changes_env_flag():
         assert env.sudo_forced
     
 def test_sudo_without_user_does_not_change_sudo_env_user():
+    old_user = env.sudo_user
+
     with ctx.sudo():
-        assert env.sudo_user == None
+        assert env.sudo_user == old_user
 
 def test_sudo_with_user_change_sudo_env_user():
     with ctx.sudo("foo"):
         assert env.sudo_user == "foo"
 
 def test_sudo_restores_previous_settings():
+    old_user = env.sudo_user
+    old_forced = env.sudo_forced
+
     with ctx.sudo("foo"):
         pass
 
-    assert not env.sudo_forced
-    assert env.sudo_user == None 
+    assert env.sudo_forced == old_forced
+    assert env.sudo_user == old_user
