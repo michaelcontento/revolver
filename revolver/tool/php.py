@@ -40,3 +40,25 @@ def ensure(fpm=False):
 
     install(fpm=fpm)
     
+def _generate_pear_or_pecl_name(package, channel=None, version=None, state=None):
+    if channel:
+        package = "%s/%s" % (channel, package)
+
+    if version and state:
+        raise ValueError("You cannot specify version AND state.")
+
+    if version or state:
+        package = "%s-%s" % (package, version or state)
+    
+    return package
+
+def ensure_pear(package, channel=None, version=None, state=None):
+    package = _generate_pear_or_pecl_name(package, channel, version, state)
+    # TODO Check if already installed
+    sudo("pear install %s; true" % package)
+
+def ensure_pecl(package, channel=None, version=None, state=None):
+    package = _generate_pear_or_pecl_name(package, channel, version, state)
+    # TODO Check if already installed
+    sudo("pecl install %s; true" % package)
+
