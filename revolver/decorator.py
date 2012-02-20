@@ -2,7 +2,6 @@
 
 from functools import wraps
 
-from cuisine import multiargs
 from fabric.decorators import task, hosts, roles, runs_once, serial, parallel, with_settings
 from fabric.network import needs_host
 
