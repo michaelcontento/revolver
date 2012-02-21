@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from cuisine import multiargs as cuisine_multiargs
 from fabric import decorators as old_decorator
 from fabric.network import needs_host as fabric_needs_host
 
 from revolver import decorator
 
 def test_revolver_is_just_a_wrapper():
-    assert decorator.multiargs == cuisine_multiargs
     assert decorator.hosts == old_decorator.hosts
     assert decorator.needs_host == fabric_needs_host
     assert decorator.parallel == old_decorator.parallel
