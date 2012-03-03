@@ -2,6 +2,8 @@
 
 from __future__ import with_statement
 
+import os
+
 from revolver import contextmanager as ctx
 from revolver import directory as dir
 from revolver import log
@@ -9,7 +11,7 @@ from revolver import user
 from revolver.core import local, env
 
 def inside():
-    return dir.exists('/vagrant') and user.exists('vagrant')
+    return dir.exists("/vagrant") and user.exists("vagrant")
 
 def is_running():
     with ctx.settings(warn_only=True):
@@ -21,15 +23,14 @@ def is_running():
 
     return True
 
-def ip():
-    # TODO: Use "vagrant ssh-config" instead 
-    # TODO: Print proper error message if something went wrong
-    command = "grep '^ *config.vm.network' Vagrantfile | egrep -o '[0-9\.]{7,}'"
-    return local(command, capture=True)
-
 def select():
     if not is_running():
-        log.abort('Vagrant based VM currently NOT running')
+        log.abort("Vagrant based VM currently NOT running")
+    
+    config_path = os.path.join(dir.temp_local(), "vagrant_ssh_config")
+    local("vagrant ssh-config > %s" % config_path)
 
-    env.password = 'vagrant'
-    env.hosts = ['vagrant@%s' % ip()]
+    env.hosts = ["default"]
+    env.password = "vagrant"
+    env.ssh_config_path = config_path 
+    env.use_ssh_config = True
