@@ -22,7 +22,9 @@ def is_running():
     return True
 
 def ip():
-    command = "grep 'config.vm.network' Vagrantfile | egrep -o '[0-9\.]{7,}'"
+    # TODO: Use "vagrant ssh-config" instead 
+    # TODO: Print proper error message if something went wrong
+    command = "grep '^ *config.vm.network' Vagrantfile | egrep -o '[0-9\.]{7,}'"
     return local(command, capture=True)
 
 def select():
