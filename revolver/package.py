@@ -9,6 +9,9 @@ from revolver import file
 from revolver import server
 from revolver.core import sudo, run
 
+def upgrade():
+    sudo("apt-get --yes upgrade")
+
 def is_installed(name):
     with ctx.settings(warn_only=True):
         res = run("dpkg -s %s" % name)
