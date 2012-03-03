@@ -18,17 +18,17 @@ def is_installed(name):
         for line in res.splitlines():
             if line.startswith("Status: "):
                 status = line[8:]
-                if "installed" in status.split(' '):
+                if "installed" in status.split(" "):
                     return True
         return False
 
 def install_ppa(name):
-    ensure('python-software-properties')
+    ensure("python-software-properties")
 
-    with ctx.cd('/etc/apt/sources.list.d'):
-        name_normalizes = name.replace('/', '-')
-        source_list = '%s-%s.list' % (name_normalizes, server.codename())
+    with ctx.cd("/etc/apt/sources.list.d"):
+        name_normalizes = name.replace("/", "-")
+        source_list = "%s-%s.list" % (name_normalizes, server.codename())
 
         if not file.exists(source_list):
-            sudo('add-apt-repository ppa:%s' % name)
+            sudo("add-apt-repository ppa:%s" % name)
             update()
