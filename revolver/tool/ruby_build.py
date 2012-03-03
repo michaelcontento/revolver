@@ -1,27 +1,26 @@
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 
 from __future__ import with_statement
 
-from revolver import command
 from revolver import contextmanager as ctx
 from revolver import directory as dir
 from revolver import package
-from revolver.core import sudo, run
+from revolver.core import run
+from revolver.tool import ruby_rbenv
 
 def install():
-    package.ensure(['git-core', 'curl', 'build-essential'])
-    tmpdir = dir.temp()
+    package.ensure("git-core") 
+    ruby_rbenv.ensure()
 
-    try:
-        with ctx.cd(tmpdir):
-            repo = 'git://github.com/sstephenson/ruby-build.git'
-            run('git clone %s ./ --depth 1' % repo)
-            sudo('./install.sh')
-    finally:
-        dir.remove(tmpdir, recursive=True)
+    dir.ensure(".rbenv/plugins")
+    with ctx.cd(".rbenv/plugins"):
+        if not dir.exists("ruby-build"):
+            run("git clone git://github.com/sstephenson/ruby-build.git")
+            return
+
+        with ctx.cd("ruby-build"):
+            run("git pull")
 
 def ensure():
-    if command.exists('ruby-build'):
-        return
-
-    install()
+    if not dir.exists(".rbenv/plugins/ruby-build"):
+        install()
