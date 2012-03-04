@@ -1,5 +1,7 @@
 # [Revolver][]
 
+[![BuildStatus](https://secure.travis-ci.org/michaelcontento/revolver.png?branch=master)](http://travis-ci.org/michaelcontento/revolver)
+
 ## About
 
 *TL;DR Wrapper for [Fabric][] and [Cuisine][] to achieve a clean, simple and
