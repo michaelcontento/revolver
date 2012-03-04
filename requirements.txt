@@ -1,0 +1,4 @@
+# These requirements are for DEVELOPMENT ONLY!
+
+# Test runner/testing utils
+nose
