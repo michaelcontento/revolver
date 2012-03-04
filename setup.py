@@ -7,7 +7,7 @@ from distutils.core import setup
 
 # Extract the current version
 # Based on: https://github.com/brosner/sqlalchemy/blob/master/setup.py#L12-14
-v = file(os.path.join(os.path.dirname(__file__), 'revolver', 'core.py'))
+v = open(os.path.join(os.path.dirname(__file__), 'revolver', 'core.py'))
 VERSION = re.compile(r".*VERSION = '(.*?)'", re.S).match(v.read()).group(1)
 v.close()
 
