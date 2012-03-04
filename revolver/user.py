@@ -6,15 +6,20 @@ from cuisine import user_ensure as ensure
 
 from revolver import log
 
-def exists(user):
-    if get(user) == None:
+def _get_with_abort(username):
+    username_data = get(username)
+    if username_data is None: 
+        log.abort("username does not exists")
+    return username_data
+
+def exists(username):
+    if get(username) == None:
         return False
 
     return True
 
-def home_directory(user):
-    user_data = get(user)
-    if user_data is None: 
-        log.abort('User does not exists')
+def home_directory(username):
+    return _get_with_abort(username)["home"]
 
-    return user_data['home']
+def shell(username):
+    return _get_with_abort(username)["shell"]
