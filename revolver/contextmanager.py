@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import with_statement
+
 from contextlib import contextmanager
 
 from fabric.context_managers import cd
@@ -14,28 +16,21 @@ from revolver import user
 from revolver.core import env
 
 @contextmanager
-def sudo(user=None):
+def sudo(username=None, login=False):
     old_forced = env.sudo_forced
-    env.sudo_forced = True
-
     old_user = env.sudo_user
-    env.sudo_user = user
+    old_shell = env.shell
+
+    env.sudo_forced = True
+    env.sudo_user = username
+
+    if login:
+        with sudo():
+            user_shell = user.shell(username) 
+        env.shell = "-i %s -i -c" % user_shell
 
     yield
 
     env.sudo_forced = old_forced
     env.sudo_user = old_user
-
-@contextmanager
-def fake_login(username):
-    home = user.home_directory(username)
-    fake_home = "export HOME=%s" % home
-    with sudo(username), cd(home), prefix(fake_home):
-        yield
-
-@contextmanager
-def rbenv():
-    path = 'export PATH="$HOME/.rbenv/shims:$HOME/.rbenv/bin:$PATH"'
-    with prefix(path):
-        yield
-
+    env.shell = old_shell
