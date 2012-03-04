@@ -16,7 +16,7 @@ def install(version, _update=True):
         run("rbenv global %s" % version)           
 
     run("rbenv rehash")                        
-    run("gem install bundler")                  
+    run("gem install --no-ri --no-rdoc bundler")                  
 
 def ensure(version):
     install(version, _update=False)
