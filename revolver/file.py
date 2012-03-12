@@ -29,6 +29,9 @@ def remove(location, recursive=False, force=True):
 
     run('rm %s %s %s' % (force, recursive, location))
 
+def touch(location):
+    run('touch %s' % location)
+
 def copy(source, destination, force=True, mode=None, owner=None, group=None):
     force = force and '-f' or ''
 
