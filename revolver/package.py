@@ -8,6 +8,11 @@ from revolver import contextmanager as ctx
 from revolver import file
 from revolver import server
 from revolver.core import sudo, run
+from revolver.decorator import multiargs
+
+ensure = multiargs(ensure)
+install = multiargs(install)
+update = multiargs(update)
 
 def upgrade():
     sudo("apt-get --yes upgrade")
