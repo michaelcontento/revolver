@@ -1,34 +1,20 @@
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 
 from __future__ import with_statement
 
-from revolver import command
-from revolver import contextmanager as ctx
-from revolver import directory as dir
-from revolver import package
-from revolver.core import sudo, run
+from revolver.core import run
+from revolver.tool import nodejs_nvm
 
-_VERSION = 'v0.6'
-_OPTIONS = ''
+def install(version, _update=True):
+    nodejs_nvm.ensure()
 
-def install(version=_VERSION, options=_OPTIONS):
-    package.ensure(['git-core', 'libssl-dev', 'curl', 'build-essential'])
-    tmpdir = dir.temp()
+    if not version.startswith("v"):
+        version = "v" + version
 
-    try:
-        with ctx.cd(tmpdir):
-            repo = 'git://github.com/joyent/node.git' 
-            run('git clone %s ./ --depth 1' % repo)
-            run('git checkout %s' % version)
-            run('./configure %s' % options)
-            run('make > /dev/null')
-            sudo('make install')
-    finally:
-        dir.remove(tmpdir, recursive=True)
+    status = run("nvm use %s" % version)
+    if status.find("not installed yet") != -1 or _update:
+        run("nvm install %s > /dev/null" % version)
+        run("nvm alias default %s" % version)
 
-def ensure(version=_VERSION, options=_OPTIONS):
-    # TODO Check if version if fulfilled
-    if command.exists('node'):
-        return
-
-    install(version, options)
+def ensure(version):
+    install(version, _update=False)
