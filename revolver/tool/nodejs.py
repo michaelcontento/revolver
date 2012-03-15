@@ -14,7 +14,8 @@ def install(version, _update=True):
     status = run("nvm use %s" % version)
     if status.find("not installed yet") != -1 or _update:
         run("nvm install %s > /dev/null" % version)
-        run("nvm alias default %s" % version)
+
+    run("nvm alias default %s" % version)
 
 def ensure(version):
     install(version, _update=False)
