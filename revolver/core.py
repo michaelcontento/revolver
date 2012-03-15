@@ -6,7 +6,7 @@ import cuisine as _cuisine
 
 from revolver.decorator import inject_use_sudo
 
-VERSION = '0.0.3'
+VERSION = '0.0.4'
 
 env.sudo_forced = False
 env.sudo_user = None
