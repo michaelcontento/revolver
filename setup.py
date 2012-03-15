@@ -16,7 +16,7 @@ setup(
     version=VERSION,
     author='Michael Contento',
     author_email='michaelcontento@gmail.com',
-    packages=['revolver', 'revolver.test'],
+    packages=['revolver', 'revolver.test', 'revolver.tool'],
     url='https://github.com/michaelcontento/revolver',
     license='LICENSE',
     description='Pythonic server orchestrating based on fabric / cuisine',
