@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
 
 from revolver.core import run
+from revolver import package
 from revolver.tool import pythonbrew
 
 def install(version, _update=True):
+    # Without this we would build python without the bz2 package
+    package.ensure("libbz2-dev")
+
     pythonbrew.ensure()
 
     status = run("pythonbrew switch %s; true" % version)
