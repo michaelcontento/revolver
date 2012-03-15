@@ -3,6 +3,7 @@
 from cuisine import package_ensure as ensure
 from cuisine import package_install as install
 from cuisine import package_update as update
+from cuisine import package_upgrade as upgrade
 
 from revolver import contextmanager as ctx
 from revolver import file
@@ -13,9 +14,6 @@ from revolver.decorator import multiargs
 ensure = multiargs(ensure)
 install = multiargs(install)
 update = multiargs(update)
-
-def upgrade():
-    sudo("apt-get --yes upgrade")
 
 def is_installed(name):
     with ctx.settings(warn_only=True):

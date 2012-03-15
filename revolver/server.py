@@ -2,6 +2,8 @@
 
 from __future__ import with_statement
 
+from cuisine import system_uuid as uuid
+
 from revolver import contextmanager as ctx
 from revolver import file
 from revolver.core import run

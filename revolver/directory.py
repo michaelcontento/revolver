@@ -6,6 +6,7 @@ from cuisine import dir_attribs as attributes
 from cuisine import dir_ensure as ensure
 from cuisine import dir_exists as exists
 from cuisine import file_attribs_get as attributes_get
+from cuisine import file_is_link as is_link
 
 from revolver.core import sudo, run
 
