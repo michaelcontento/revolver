@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 
 from __future__ import with_statement
 
@@ -10,13 +10,13 @@ def install(version, _update=True):
     ruby_rbenv.ensure()
     ruby_build.ensure()
 
-    status = run("rbenv global %s; true" % version)           
+    status = run("rbenv global %s; true" % version)
     if not status == "" or _update:
-        run("rbenv install %s" % version)      
-        run("rbenv global %s" % version)           
+        run("rbenv install %s" % version)
+        run("rbenv global %s" % version)
 
-    run("rbenv rehash")                        
-    run("gem install --no-ri --no-rdoc bundler")                  
+    run("rbenv rehash")
+    run("gem install --no-ri --no-rdoc bundler")
 
 def ensure(version):
     install(version, _update=False)
