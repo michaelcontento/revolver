@@ -23,7 +23,15 @@ def multiargs(func):
 def inject_use_sudo(func):
     @wraps(func)
     def inject_wrapper(*args, **kwargs):
-        if not 'use_sudo' in kwargs:
-            kwargs['use_sudo'] = env.sudo_forced
+        func_args = func.func_code.co_varnames
+
+        # Fabric
+        if "use_sudo" not in kwargs and "use_sudo" in func_args:
+            kwargs["use_sudo"] = env.sudo_forced
+
+        # Cuisine
+        if "sudo" not in kwargs and "sudo" in func_args:
+            kwargs["sudo"] = env.sudo_forced
+
         return func(*args, **kwargs)
     return inject_wrapper
