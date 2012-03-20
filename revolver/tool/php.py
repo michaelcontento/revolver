@@ -1,64 +1,78 @@
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 
-from revolver import command
+from __future__ import with_statement
+
+from revolver.core import run
+from revolver import contextmanager as ctx
+from revolver import directory as dir
+from revolver import file
 from revolver import package
-from revolver import server
-from revolver import service
-from revolver.core import sudo
+from revolver.tool import php_build
+from revolver.tool import php_phpenv
 
-def install(fpm=False):
-    server_version = server.version()
-    apache_was_installed = package.is_installed('apache2.2-bin')
+def install(version, fpm=False, xdebug=False):
+    php_build.ensure()
+    php_phpenv.ensure()
 
-    packages = [
-        'php5-suhosin', 'php5-mysql', 'php5-memcache', 'php5-memcached', 
-        'php5-mcrypt', 'php5-json', 'php5-cli', 'php-apc', 'php5-dev', 
-        'php5-curl', 'php-pear', 'php5-gd'
-    ]
-    if fpm:
-        packages.append('php5-fpm')
+    switched = run("phpenv global %s; true" % version)
+    if not switched == "":
+        _install_php(version, fpm, xdebug)
+        run("phpenv global %s" % version)
 
-    # Add the ppa for old ubuntu versions
-    if fpm and server_version == '10.04':
-        package.install_ppa('brianmercer/php')
+    run("phpenv rehash")
+    _install_apc()
+    _install_composer()
 
-    package.install(packages)
+def _install_php(version, fpm, xdebug):
+    package.ensure([
+        "build-essential", "lemon", "libbz2-dev", "libpcre3-dev",
+        "libc-client2007e-dev", "libcurl4-gnutls-dev", "libexpat1-dev",
+        "libfreetype6-dev", "libgmp3-dev", "libicu-dev", "libjpeg8-dev",
+        "libltdl-dev", "libmcrypt-dev", "libmhash-dev", "libpng12-dev",
+        "libreadline-dev", "libssl1.0.0", "libssl-dev", "libt1-dev",
+        "libtidy-dev", "libxml2-dev", "libxslt1-dev", "re2c", "zlib1g-dev"
+    ])
 
-    # Some old php packages requires apache2 which we cannot remove
-    # but we can stop it and remove it from to boot process
-    if server_version != '11.10' and not apache_was_installed:
-        sudo('update-rc.d -f apache2 remove')
-        service.stop('apache2')
+    def configure(value):
+        key = "PHP_BUILD_CONFIGURE_OPTS"
+        return "export %(key)s=\"%(value)s $%(key)s\"" % locals()
 
-    if fpm:
-        sudo('sudo update-rc.d -f php5-fpm defaults')
-        service.restart('php5-fpm')
+    prefix = "$HOME/.phpenv/versions/%s" % version
 
-def ensure(fpm=False):
-    if command.exists('php5'):
+    # Force the usage of pear because pyrus is unable to install APC
+    # See: https://github.com/CHH/php-build/blob/master/man/php-build.1.ronn#L79
+    pear_path = "%s/pear" % prefix
+    pear = configure("--with-pear=%s" % pear_path)
+    dir.ensure(pear_path)
+
+    # We only support this two configuration options! Why?
+    # - Xdebug is already integrated into php-build
+    # - FPM is a very common flag
+    #
+    # But if you want to configure php even further? Own definition files!
+    # See: https://github.com/CHH/php-build/blob/master/man/php-build.1.ronn#L54
+    fpm    = (fpm and configure("--enable-fpm")) or "true"
+    xdebug = (xdebug and "true") or "export PHP_BUILD_XDEBUG_ENABLE = 'off'"
+
+    with ctx.prefix(pear), ctx.prefix(xdebug), ctx.prefix(fpm):
+        run("php-build %s %s" % (version, prefix))
+
+    # Some executables (like php-fpm) aren't available through phpenv without
+    # this symlinks
+    with ctx.cd(prefix):
+        run('find sbin/ -type f -exec ln -sf "$(pwd)/{}" -t "$(pwd)/bin" \;')
+
+def _install_apc():
+    installed = run("pecl list | grep -i apc; true")
+    if installed:
         return
 
-    install(fpm=fpm)
-    
-def _generate_pear_or_pecl_name(package, channel=None, version=None, state=None):
-    if channel:
-        package = "%s/%s" % (channel, package)
+    run("yes '' | pecl install apc")
 
-    if version and state:
-        raise ValueError("You cannot specify version AND state.")
+    bin_path = run("phpenv which php")
+    conf_path = bin_path.replace("/bin/php", "/etc/conf.d")
+    file.write(conf_path + "/apc.ini", "extension=apc.so")
 
-    if version or state:
-        package = "%s-%s" % (package, version or state)
-    
-    return package
-
-def ensure_pear(package, channel=None, version=None, state=None):
-    package = _generate_pear_or_pecl_name(package, channel, version, state)
-    # TODO Check if already installed
-    sudo("pear install %s; true" % package)
-
-def ensure_pecl(package, channel=None, version=None, state=None):
-    package = _generate_pear_or_pecl_name(package, channel, version, state)
-    # TODO Check if already installed
-    sudo("pecl install %s; true" % package)
-
+def _install_composer():
+    # TODO Implement this
+    pass
