@@ -17,7 +17,7 @@ def test_revolver_is_just_a_wrapper():
 def test_sudo_changes_env_flag():
     with ctx.sudo():
         assert env.sudo_forced
-    
+
 def test_sudo_without_user_does_not_change_sudo_env_user():
     old_user = env.sudo_user
 

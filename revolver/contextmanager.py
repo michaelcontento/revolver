@@ -26,7 +26,7 @@ def sudo(username=None, login=False):
 
     if login:
         with sudo():
-            user_shell = user.shell(username) 
+            user_shell = user.shell(username)
         env.shell = "-i %s -i -c" % user_shell
 
     yield
