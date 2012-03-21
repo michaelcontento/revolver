@@ -39,4 +39,4 @@ def copy(source, destination, force=True, mode=None, owner=None, group=None):
     force = force and '-f' or ''
 
     run('cp %s %s %s' % (force, source, destination))
-    attributes(destination, mode, owner, group)
+    attributes(destination, mode=mode, owner=owner, group=group)
