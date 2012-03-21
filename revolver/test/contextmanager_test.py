@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import with_statement
+
 from fabric import context_managers as fabric_ctx
 
 from revolver import contextmanager as ctx
