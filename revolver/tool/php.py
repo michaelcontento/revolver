@@ -54,8 +54,10 @@ def _install_php(version, fpm, xdebug):
     fpm    = (fpm and configure("--enable-fpm")) or "true"
     xdebug = (xdebug and "true") or "export PHP_BUILD_XDEBUG_ENABLE = 'off'"
 
-    with ctx.prefix(pear), ctx.prefix(xdebug), ctx.prefix(fpm):
-        run("php-build %s %s" % (version, prefix))
+    with ctx.prefix(pear):
+        with ctx.prefix(xdebug):
+            with ctx.prefix(fpm):
+                run("php-build %s %s" % (version, prefix))
 
     # Some executables (like php-fpm) aren't available through phpenv without
     # this symlinks

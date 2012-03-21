@@ -43,9 +43,10 @@ def reload():
     service.reload('nginx')
 
 def site_disable(site):
-    with ctx.cd('/etc/nginx/sites-enabled'), ctx.sudo():
-        file.remove(site)
-        reload()
+    with ctx.sudo():
+        with ctx.cd('/etc/nginx/sites-enabled'):
+            file.remove(site)
+            reload()
 
 def site_enable(site):
     site_available = '/etc/nginx/sites-available/%s' % site
@@ -56,7 +57,8 @@ def site_enable(site):
         reload()
 
 def site_ensure(site, lines):
-    with ctx.sudo(), ctx.cd('/etc/nginx/sites-available/'):
-        file.write(site, lines)
+    with ctx.sudo():
+        with ctx.cd('/etc/nginx/sites-available/'):
+            file.write(site, lines)
 
     site_enable(site)
