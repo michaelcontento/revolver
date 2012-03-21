@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import with_statement
+
 from cuisine import package_ensure as ensure
 from cuisine import package_install as install
 from cuisine import package_update as update

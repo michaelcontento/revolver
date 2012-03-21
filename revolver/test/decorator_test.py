@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import with_statement
+
 from fabric import decorators as old_decorator
 from fabric.network import needs_host as fabric_needs_host
 
