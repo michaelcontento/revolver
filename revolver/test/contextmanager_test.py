@@ -39,3 +39,8 @@ def test_sudo_restores_previous_settings():
 
     assert env.sudo_forced == old_forced
     assert env.sudo_user == old_user
+
+def test_sudo_default_login():
+    old_shell = env.shell
+    with ctx.sudo():
+        assert env.shell == old_shell
