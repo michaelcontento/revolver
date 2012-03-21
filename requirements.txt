@@ -2,3 +2,6 @@
 
 # Test runner/testing utils
 nose
+
+# Mocking library
+fudge
