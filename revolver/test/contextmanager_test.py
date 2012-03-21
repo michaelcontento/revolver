@@ -3,7 +3,7 @@
 from __future__ import with_statement
 
 from fabric import context_managers as fabric_ctx
-import fudge
+from fudge import patch
 
 from revolver import contextmanager as ctx
 from revolver.core import env
@@ -46,7 +46,7 @@ def test_sudo_default_login():
     with ctx.sudo():
         assert env.shell == old_shell
 
-@fudge.patch("revolver.user.shell")
+@patch("revolver.user.shell")
 def test_sudo_with_interactive_login(shell):
     shell.expects_call().with_args("foo").returns("bar")
 

@@ -15,7 +15,7 @@ from fabric.contrib.files import comment as fabric_comment
 from fabric.contrib.files import contains as fabric_contains
 from fabric.contrib.files import sed as fabric_sed
 from fabric.contrib.files import uncomment as fabric_uncomment
-import fudge
+from fudge import patch
 
 from revolver import file
 
@@ -39,17 +39,17 @@ def test_revolver_is_just_a_wrapper():
     assert_contain_function_wrapped(file.uncomment, fabric_uncomment)
     assert_contain_function_wrapped(file.write, cuisine_write)
 
-@fudge.patch("revolver.core._run")
+@patch("revolver.core._run")
 def test_touch(run):
     run.expects_call().with_args("touch path")
     file.touch("path")
 
-@fudge.patch("revolver.core._run")
+@patch("revolver.core._run")
 def test_remove_defaults(run):
     run.expects_call().with_args("rm -f  path")
     file.remove("path")
 
-@fudge.patch("revolver.core._run")
+@patch("revolver.core._run")
 def test_remove_recusrive(run):
     run.expects_call().with_args("rm -f  path")
     file.remove("path", recursive=False)
@@ -57,7 +57,7 @@ def test_remove_recusrive(run):
     run.expects_call().with_args("rm -f -r path")
     file.remove("path", recursive=True)
 
-@fudge.patch("revolver.core._run")
+@patch("revolver.core._run")
 def test_remove_force(run):
     run.expects_call().with_args("rm   path")
     file.remove("path", force=False)
@@ -65,25 +65,25 @@ def test_remove_force(run):
     run.expects_call().with_args("rm -f  path")
     file.remove("path", force=True)
 
-@fudge.patch("revolver.core._run")
+@patch("revolver.core._run")
 def test_copy(run):
     run.expects_call().with_args("cp -f src dst")
     file.copy("src", "dst")
 
-@fudge.patch("revolver.core._run")
+@patch("revolver.core._run")
 def test_copy_force_false(run):
     run.expects_call().with_args("cp  src dst")
     file.copy("src", "dst", force=False)
 
-@fudge.patch("revolver.core._run")
-@fudge.patch("revolver.file.attributes")
+@patch("revolver.core._run")
+@patch("revolver.file.attributes")
 def test_copy_default_attributes(run, attributes):
     run.expects_call()
     attributes.expects_call().with_args("dst", mode=None, owner=None, group=None)
     file.copy("src", "dst")
 
-@fudge.patch("revolver.core._run")
-@fudge.patch("revolver.file.attributes")
+@patch("revolver.core._run")
+@patch("revolver.file.attributes")
 def test_copy_default_attributes(run, attributes):
     run.expects_call()
     attributes.expects_call().with_args("dst", mode="foo", owner="bar", group="baz")
