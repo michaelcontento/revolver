@@ -5,3 +5,7 @@ nose
 
 # Mocking library
 fudge
+
+# Use latest cuisine version (python 2.5 compatible)
+# TODO Remove this after cuisine 0.2.5 was released
+git+git://github.com/sebastien/cuisine.git
