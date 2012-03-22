@@ -21,15 +21,29 @@ def test_revolver_is_just_a_wrapper():
     assert decorator.with_settings == old_decorator.with_settings
 
 def test_multiargs():
-    args = []
-    def dummy(arg):
-        args.append(arg)
+    stack = []
+    def dummy(*args, **kwargs): stack.append((args, kwargs))
 
     multiargs(dummy)([1, 2, 3])
-    assert args == [1, 2, 3]
+    print stack
+    assert stack == [((1,), {}), ((2,), {}), ((3,), {})]
 
-def _sudo_dummy(use_sudo=None):
-    return use_sudo
+def test_multiargs_no_argumetns():
+    stack = []
+    def dummy(*args, **kwargs): stack.append((args, kwargs))
+
+    multiargs(dummy)()
+    assert stack == [((), {})]
+
+def test_mutliargs_no_list():
+    stack = []
+    def dummy(*args, **kwargs): stack.append((args, kwargs))
+
+    multiargs(dummy)("foo", bar="baz")
+    assert stack == [(("foo",), {"bar": "baz"})]
+
+def _sudo_dummy(sudo=None):
+    return sudo
 
 def test_sudo_dummy():
     assert _sudo_dummy() == None
@@ -41,8 +55,8 @@ def test_inject_sudo_with_forced_sudo():
         assert inject_use_sudo(_sudo_dummy)()
 
 def test_inject_sudo_does_nothing_if_argument_given():
-    assert inject_use_sudo(_sudo_dummy)(use_sudo=True)
-    assert not inject_use_sudo(_sudo_dummy)(use_sudo=False)
+    assert inject_use_sudo(_sudo_dummy)(sudo=True)
+    assert not inject_use_sudo(_sudo_dummy)(sudo=False)
 
 def _use_sudo_dummy(use_sudo=None):
     return use_sudo
