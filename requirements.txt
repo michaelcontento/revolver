@@ -5,7 +5,3 @@ nose
 
 # Mocking library
 fudge
-
-# Python 2.5 compatible version of cuisine
-# TODO Remove if https://github.com/sebastien/cuisine/pull/63 is merged
-git+git://github.com/michaelcontento/cuisine.git@import-with-from-future
