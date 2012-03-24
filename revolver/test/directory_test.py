@@ -98,7 +98,7 @@ def test_create_default_attributes(run, exists, attributes):
 @patch("revolver.core._run")
 @patch("revolver.directory.exists")
 @patch("revolver.directory.attributes")
-def test_create_default_attributes(run, exists, attributes):
+def test_create_passes_attributes(run, exists, attributes):
     run.expects_call().with_args("mkdir  path")
     exists.expects_call().returns(False)
     attributes.expects_call().with_args("path", mode="foo", owner="bar", group="baz")
