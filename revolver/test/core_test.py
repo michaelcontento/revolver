@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import division
+from __future__ import with_statement
+
 from fabric.api import local as fabric_local
 from fabric.api import get as fabric_get
 from fabric.api import env as fabric_env

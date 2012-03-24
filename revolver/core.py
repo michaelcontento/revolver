@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import division
+from __future__ import with_statement
+
 from fabric import api as _fabric
 from fabric.api import local, get, env, put
 import cuisine as _cuisine

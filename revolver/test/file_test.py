@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import division
+from __future__ import with_statement
+
 from cuisine import file_attribs as cuisine_attributes
 from cuisine import file_attribs_get as cuisine_attributes_get
 from cuisine import file_ensure as cuisine_ensure

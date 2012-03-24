@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import division
+from __future__ import with_statement
+
 from cuisine import group_check as cuisine_get
 from cuisine import group_create as cuisine_create
 from cuisine import group_ensure as cuisine_ensure

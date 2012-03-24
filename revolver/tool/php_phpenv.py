@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import division
+from __future__ import with_statement
+
 from revolver.core import run
 from revolver import directory as dir
 from revolver import package

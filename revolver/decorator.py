@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import division
+from __future__ import with_statement
+
 from functools import wraps
 
 from fabric.decorators import task, hosts, roles, runs_once, serial, parallel, with_settings

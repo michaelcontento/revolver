@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import division
+from __future__ import with_statement
+
 from tempfile import mkdtemp
 
 from cuisine import dir_attribs as attributes

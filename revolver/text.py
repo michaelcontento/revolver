@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import division
+from __future__ import with_statement
+
 from cuisine import text_detect_eol as detect_eol
 from cuisine import text_ensure_line as ensure_line
 from cuisine import text_normalize as spaces_normalize
