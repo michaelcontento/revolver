@@ -22,6 +22,10 @@ def test_revolver_is_just_a_wrapper():
 
     assert_contain_function_wrapped(core.put, fabric_put)
 
+def test_environment_default_values():
+    assert not core.env.sudo_forced
+    assert core.env.sudo_user == None
+
 def test_patch_fabric_api():
     assert fabric.api.run == core.run
     assert fabric.api.sudo == core.sudo
@@ -37,3 +41,17 @@ def test_patch_cuisine():
 def test_original_methods_are_available_but_private():
     assert core._run.__module__ == "fabric.operations"
     assert core._sudo.__module__ == "fabric.operations"
+
+@patch("revolver.core.sudo")
+def test_force_sudo_via_env(sudo):
+    sudo.expects_call().with_args("foo")
+    core.env.sudo_forced = True
+    core.run("foo")
+    core.env.sudo_forced = False
+
+@patch("revolver.core._sudo")
+def test_inject_user_for_sudo_via_env(_sudo):
+    _sudo.expects_call().with_args("foo", user="bar")
+    core.env.sudo_user = "bar"
+    core.sudo("foo")
+    core.env.sudo_user = None
