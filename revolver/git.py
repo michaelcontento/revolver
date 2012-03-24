@@ -5,17 +5,17 @@ from __future__ import absolute_import, division, with_statement
 import os
 
 from revolver import directory as dir
-from revolver.core import local
+from revolver import core
 
 def repository_name():
     command = "grep 'url' .git/config | cut -d':' -f2"
-    return local(command, capture=True)
+    return core.local(command, capture=True)
 
 def create_archive(revision):
     tmp_folder = dir.temp_local()
     tmp_tar = os.path.join(tmp_folder, 'repo.tar.gz')
 
-    local(
+    core.local(
         'git archive --format=tar %(rev)s | gzip > %(tar)s'
         % {'rev': revision, 'tar': tmp_tar}
     )
@@ -23,4 +23,4 @@ def create_archive(revision):
     return tmp_tar
 
 def revparse(revision):
-    return local('git rev-parse %s' % revision, capture=True)
+    return core.local('git rev-parse %s' % revision, capture=True)
