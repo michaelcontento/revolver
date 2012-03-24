@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 
 from __future__ import division
 from __future__ import with_statement
@@ -17,4 +17,4 @@ def install():
 def ensure():
     if not command.exists('stunnel4'):
         install()
-    
+

@@ -30,7 +30,7 @@ def deploy(owner, upload_hook=None, revision='HEAD', keep_versions=10):
             with ctx.cd(new_release_dir):
                 upload_hook(owner, paths)
 
-    # Activate the new release and 
+    # Activate the new release and
     _symlink_release(owner, paths['current'], new_release_dir)
     _clear_old_releases(paths['releases'], keep_versions)
 
@@ -46,7 +46,7 @@ def _ensure_layout(owner):
     paths = {
         'project':  join(project_dir),
         'current':  join(project_dir, 'current'),
-        'releases': join(project_dir, 'releases'), 
+        'releases': join(project_dir, 'releases'),
         'shared':   join(project_dir, 'shared'),
         'logs':     join(project_dir, 'shared', 'logs'),
         'temp':     join(project_dir, 'shared', 'temp')
@@ -54,7 +54,7 @@ def _ensure_layout(owner):
 
     with ctx.sudo(owner):
         for path in paths.itervalues():
-            if dir.exists(path): 
+            if dir.exists(path):
                 continue
             dir.create(path, recursive=True)
 

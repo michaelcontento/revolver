@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 
 from __future__ import division
 from __future__ import with_statement
@@ -52,7 +52,7 @@ def site_disable(site):
 def site_enable(site):
     site_available = '/etc/nginx/sites-available/%s' % site
     site_enabled = '/etc/nginx/sites-enabled/%s' % site
-   
+
     with ctx.sudo():
         file.link(site_available, site_enabled)
         reload()

@@ -8,7 +8,7 @@ from revolver.core import sudo
 
 def command(name, command):
     sudo(
-        '/etc/init.d/%(name)s %(command)s' 
+        '/etc/init.d/%(name)s %(command)s'
         % {'name': name, 'command': command}
     )
 

@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 
 from __future__ import division
 from __future__ import with_statement
@@ -11,9 +11,9 @@ def install():
     package.ensure("curl")
 
     if not command.exists("pythonbrew"):
-        url = "https://raw.github.com/utahta/pythonbrew/master/pythonbrew-install" 
+        url = "https://raw.github.com/utahta/pythonbrew/master/pythonbrew-install"
         run("curl -s %s | bash" % url)
-    else: 
+    else:
         run("pythonbrew update")
 
 def ensure():

@@ -10,7 +10,7 @@ from revolver.core import run
 from revolver.tool import ruby_rbenv
 
 def install():
-    package.ensure("git-core") 
+    package.ensure("git-core")
     ruby_rbenv.ensure()
 
     dir.ensure(".rbenv/plugins")

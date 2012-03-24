@@ -17,7 +17,7 @@ def create_archive(revision):
     tmp_tar = os.path.join(tmp_folder, 'repo.tar.gz')
 
     local(
-        'git archive --format=tar %(rev)s | gzip > %(tar)s' 
+        'git archive --format=tar %(rev)s | gzip > %(tar)s'
         % {'rev': revision, 'tar': tmp_tar}
     )
 

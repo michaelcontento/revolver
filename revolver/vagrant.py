@@ -27,11 +27,11 @@ def is_running():
 def select():
     if not is_running():
         log.abort("Vagrant based VM currently NOT running")
-    
+
     config_path = os.path.join(dir.temp_local(), "vagrant_ssh_config")
     local("vagrant ssh-config > %s" % config_path)
 
     env.hosts = ["default"]
     env.password = "vagrant"
-    env.ssh_config_path = config_path 
+    env.ssh_config_path = config_path
     env.use_ssh_config = True

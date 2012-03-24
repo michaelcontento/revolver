@@ -42,7 +42,7 @@ setup(
         'Topic :: Software Development :: Libraries',
         'Topic :: System :: Clustering',
         'Topic :: System :: Software Distribution',
-        'Topic :: System :: Systems Administration',   
+        'Topic :: System :: Systems Administration',
         'Topic :: Utilities'
     ],
 )
