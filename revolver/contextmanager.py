@@ -1,17 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import division
-from __future__ import with_statement
+from __future__ import absolute_import, division, with_statement
 
 from contextlib import contextmanager
 
-from fabric.context_managers import cd
-from fabric.context_managers import hide
-from fabric.context_managers import lcd
-from fabric.context_managers import path
-from fabric.context_managers import prefix
-from fabric.context_managers import settings
-from fabric.context_managers import show
+from fabric.context_managers import cd, hide, lcd, path, prefix, settings, show
 
 from revolver import user
 from revolver.core import env

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import division
-from __future__ import with_statement
+from __future__ import absolute_import, division, with_statement
 
 from cuisine import group_check as get
 from cuisine import group_create as create

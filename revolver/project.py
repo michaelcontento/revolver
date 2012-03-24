@@ -1,17 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import division
-from __future__ import with_statement
+from __future__ import absolute_import, division, with_statement
 
 from datetime import datetime
 import os
 
 from revolver import contextmanager as ctx
 from revolver import directory as dir
-from revolver import file
-from revolver import git
-from revolver import log
-from revolver import user
+from revolver import file, git, log, user
 from revolver.core import put, run, sudo, local
 
 def deploy(owner, upload_hook=None, revision='HEAD', keep_versions=10):

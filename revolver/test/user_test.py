@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
 
-from cuisine import user_check as cuisine_get
-from cuisine import user_create as cuisine_create
-from cuisine import user_ensure as cuisine_ensure
-from cuisine import user_remove as cuisine_remove
+from __future__ import absolute_import, division, with_statement
+
 from fudge import patch
+import cuisine
 
 from revolver import user
 
 def test_revolver_is_just_a_wrapper():
-    assert user.get == cuisine_get
-    assert user.create == cuisine_create
-    assert user.ensure == cuisine_ensure
-    assert user.remove == cuisine_remove
+    assert user.get == cuisine.user_check
+    assert user.create == cuisine.user_create
+    assert user.ensure == cuisine.user_ensure
+    assert user.remove == cuisine.user_remove
 
 @patch("revolver.user.get")
 def test_exists(get):

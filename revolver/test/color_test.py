@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import division
-from __future__ import with_statement
+from __future__ import absolute_import, division, with_statement
 
-from fabric import colors as old
+import fabric
 
-from revolver import color as new
+from revolver import color
 
 def test_revolver_is_just_a_wrapper():
-    assert new.blue == old.blue
-    assert new.cyan == old.cyan
-    assert new.green == old.green
-    assert new.magenta == old.magenta
-    assert new.red == old.red
-    assert new.white == old.white
-    assert new.yellow == old.yellow
+    assert color.blue == fabric.colors.blue
+    assert color.cyan == fabric.colors.cyan
+    assert color.green == fabric.colors.green
+    assert color.magenta == fabric.colors.magenta
+    assert color.red == fabric.colors.red
+    assert color.white == fabric.colors.white
+    assert color.yellow == fabric.colors.yellow

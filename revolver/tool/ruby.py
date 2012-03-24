@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import division
-from __future__ import with_statement
+from __future__ import absolute_import, division, with_statement
 
 from revolver.core import run
-from revolver.tool import ruby_build
-from revolver.tool import ruby_rbenv
+from revolver.tool import ruby_build, ruby_rbenv
 
 def install(version, _update=True):
     ruby_rbenv.ensure()

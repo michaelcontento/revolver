@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import division
-from __future__ import with_statement
+from __future__ import absolute_import, division, with_statement
 
 from revolver.core import run
 from revolver import contextmanager as ctx
 from revolver import directory as dir
-from revolver import file
-from revolver import package
-from revolver.tool import php_build
-from revolver.tool import php_phpenv
+from revolver import file, package
+from revolver.tool import php_build, php_phpenv
 
 def install(version, fpm=False, xdebug=False):
     php_build.ensure()

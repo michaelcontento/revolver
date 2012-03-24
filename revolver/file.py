@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import division
-from __future__ import with_statement
+from __future__ import absolute_import, division, with_statement
 
 from cuisine import file_attribs as attributes
 from cuisine import file_attribs_get as attributes_get
@@ -13,11 +12,7 @@ from cuisine import file_local_read as read_local
 from cuisine import file_read as read
 from cuisine import file_update as update
 from cuisine import file_write as write
-from fabric.contrib.files import append
-from fabric.contrib.files import comment
-from fabric.contrib.files import contains
-from fabric.contrib.files import sed
-from fabric.contrib.files import uncomment
+from fabric.contrib.files import append, comment, contains, sed, uncomment
 
 from revolver.core import sudo, run
 from revolver.decorator import inject_use_sudo

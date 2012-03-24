@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 
-from cuisine import system_uuid as cuisine_uuid
+from __future__ import absolute_import, division, with_statement
+
 from fudge import patch
+import cuisine
 
 from revolver import server
 
 def test_revolver_is_just_a_wrapper():
-    assert server.uuid == cuisine_uuid
+    assert server.uuid == cuisine.system_uuid
 
 @patch("revolver.file.copy")
 def test_timezone_default(copy):

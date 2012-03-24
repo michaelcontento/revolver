@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import division
-from __future__ import with_statement
+from __future__ import absolute_import, division, with_statement
 
 import os
 
 from revolver import contextmanager as ctx
 from revolver import directory as dir
-from revolver import log
-from revolver import user
+from revolver import log, user
 from revolver.core import local, env
 
 def inside():

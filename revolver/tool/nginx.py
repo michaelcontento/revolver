@@ -1,16 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import division
-from __future__ import with_statement
+from __future__ import absolute_import, division, with_statement
 
-from revolver import command
+from revolver.core import sudo
+from revolver import command, file, package, server, service
 from revolver import contextmanager as ctx
 from revolver import directory as dir
-from revolver import file
-from revolver import package
-from revolver import server
-from revolver import service
-from revolver.core import sudo
 
 def install():
     already_installed = package.is_installed('nginx')

@@ -1,31 +1,27 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import division
-from __future__ import with_statement
+from __future__ import absolute_import, division, with_statement
 
-from fabric import decorators as old_decorator
-from fabric.network import needs_host as fabric_needs_host
+import fabric
 
-from revolver.decorator import inject_use_sudo
-from revolver.decorator import multiargs
 from revolver import contextmanager as ctx
 from revolver import decorator
 
 def test_revolver_is_just_a_wrapper():
-    assert decorator.hosts == old_decorator.hosts
-    assert decorator.needs_host == fabric_needs_host
-    assert decorator.parallel == old_decorator.parallel
-    assert decorator.roles == old_decorator.roles
-    assert decorator.runs_once == old_decorator.runs_once
-    assert decorator.serial == old_decorator.serial
-    assert decorator.task == old_decorator.task
-    assert decorator.with_settings == old_decorator.with_settings
+    assert decorator.hosts == fabric.decorators.hosts
+    assert decorator.needs_host == fabric.network.needs_host
+    assert decorator.parallel == fabric.decorators.parallel
+    assert decorator.roles == fabric.decorators.roles
+    assert decorator.runs_once == fabric.decorators.runs_once
+    assert decorator.serial == fabric.decorators.serial
+    assert decorator.task == fabric.decorators.task
+    assert decorator.with_settings == fabric.decorators.with_settings
 
 def test_multiargs():
     stack = []
     def dummy(*args, **kwargs): stack.append((args, kwargs))
 
-    multiargs(dummy)([1, 2, 3])
+    decorator.multiargs(dummy)([1, 2, 3])
     print stack
     assert stack == [((1,), {}), ((2,), {}), ((3,), {})]
 
@@ -33,14 +29,14 @@ def test_multiargs_no_argumetns():
     stack = []
     def dummy(*args, **kwargs): stack.append((args, kwargs))
 
-    multiargs(dummy)()
+    decorator.multiargs(dummy)()
     assert stack == [((), {})]
 
-def test_mutliargs_no_list():
+def test_multiargs_no_list():
     stack = []
     def dummy(*args, **kwargs): stack.append((args, kwargs))
 
-    multiargs(dummy)("foo", bar="baz")
+    decorator.multiargs(dummy)("foo", bar="baz")
     assert stack == [(("foo",), {"bar": "baz"})]
 
 def _sudo_dummy(sudo=None):
@@ -53,11 +49,11 @@ def test_sudo_dummy():
 
 def test_inject_sudo_with_forced_sudo():
     with ctx.sudo():
-        assert inject_use_sudo(_sudo_dummy)()
+        assert decorator.inject_use_sudo(_sudo_dummy)()
 
 def test_inject_sudo_does_nothing_if_argument_given():
-    assert inject_use_sudo(_sudo_dummy)(sudo=True)
-    assert not inject_use_sudo(_sudo_dummy)(sudo=False)
+    assert decorator.inject_use_sudo(_sudo_dummy)(sudo=True)
+    assert not decorator.inject_use_sudo(_sudo_dummy)(sudo=False)
 
 def _use_sudo_dummy(use_sudo=None):
     return use_sudo
@@ -69,8 +65,8 @@ def test_sudo_dummy():
 
 def test_inject_use_sudo_with_forced_sudo():
     with ctx.sudo():
-        assert inject_use_sudo(_use_sudo_dummy)()
+        assert decorator.inject_use_sudo(_use_sudo_dummy)()
 
 def test_inject_use_sudo_does_nothing_if_argument_given():
-    assert inject_use_sudo(_use_sudo_dummy)(use_sudo=True)
-    assert not inject_use_sudo(_use_sudo_dummy)(use_sudo=False)
+    assert decorator.inject_use_sudo(_use_sudo_dummy)(use_sudo=True)
+    assert not decorator.inject_use_sudo(_use_sudo_dummy)(use_sudo=False)
