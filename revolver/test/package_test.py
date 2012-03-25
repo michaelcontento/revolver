@@ -5,16 +5,16 @@ from __future__ import absolute_import, division, with_statement
 from fudge import patch
 import cuisine
 
-from revolver import package
+from revolver import package, decorator
 
 from .utils import assert_contain_function_wrapped
 
 def test_revolver_is_just_a_wrapper():
-    assert package.upgrade == cuisine.package_upgrade
-
-    assert_contain_function_wrapped(package.ensure, cuisine.package_ensure)
+    # TODO Check the decorator stack (multiargs and sudo)
+    assert_contain_function_wrapped(package.ensure,  cuisine.package_ensure)
     assert_contain_function_wrapped(package.install, cuisine.package_install)
-    assert_contain_function_wrapped(package.update, cuisine.package_update)
+    assert_contain_function_wrapped(package.update,  cuisine.package_update)
+    assert_contain_function_wrapped(package.upgrade, cuisine.package_upgrade)
 
 @patch("revolver.core._run")
 def test_is_installed(run):

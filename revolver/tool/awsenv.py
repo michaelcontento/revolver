@@ -8,8 +8,7 @@ from revolver import directory as dir
 from revolver import package
 
 def install():
-    with ctx.sudo():
-        package.ensure(["git-core", "openjdk-7-jre"])
+    package.ensure(["git-core", "openjdk-7-jre"])
 
     if not dir.exists(".awsenv"):
         run("git clone git://github.com/michaelcontento/awsenv.git .awsenv")

@@ -5,7 +5,7 @@ from __future__ import absolute_import, division, with_statement
 import fabric
 
 from revolver import contextmanager as ctx
-from revolver import decorator
+from revolver import decorator, core
 
 def test_revolver_is_just_a_wrapper():
     assert decorator.hosts == fabric.decorators.hosts
@@ -70,3 +70,11 @@ def test_inject_use_sudo_with_forced_sudo():
 def test_inject_use_sudo_does_nothing_if_argument_given():
     assert decorator.inject_use_sudo(_use_sudo_dummy)(use_sudo=True)
     assert not decorator.inject_use_sudo(_use_sudo_dummy)(use_sudo=False)
+
+def test_sudo():
+    # TODO Properly mock/assert the used context
+    def checker():
+        assert core.env.sudo_forced
+        assert core.env.sudo_user == None
+
+    decorator.sudo(checker)()

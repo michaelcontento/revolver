@@ -8,6 +8,14 @@ from fabric.decorators import task, hosts, roles, runs_once, serial, parallel, w
 from fabric.network import needs_host
 
 from revolver.core import env
+from revolver import contextmanager as ctx
+
+def sudo(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        with ctx.sudo():
+            func(*args, **kwargs)
+    return wrapper
 
 def multiargs(func):
     @wraps(func)
