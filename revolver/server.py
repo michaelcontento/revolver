@@ -16,7 +16,7 @@ def timezone(zone='UTC'):
         file.copy(from_file, to_file)
 
 def version():
-    return run('lsb_release --release --short')
+    return run('lsb_release --release --short').stdout
 
 def codename():
-    return run('lsb_release --codename --short')
+    return run('lsb_release --codename --short').stdout
