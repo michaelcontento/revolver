@@ -7,7 +7,7 @@ import fabric
 
 from revolver import file
 
-from .utils import assert_contain_function_wrapped
+from .utils import assert_contain_function_wrapped, run_result
 
 def test_revolver_is_just_a_wrapper():
     assert file.attributes == cuisine.file_attribs
@@ -26,6 +26,29 @@ def test_revolver_is_just_a_wrapper():
     assert_contain_function_wrapped(file.sed, fabric.contrib.files.sed)
     assert_contain_function_wrapped(file.uncomment, fabric.contrib.files.uncomment)
     assert_contain_function_wrapped(file.write, cuisine.file_write)
+
+@patch("revolver.core._run")
+@patch("revolver.file.attributes")
+def test_temp_calles_mktemp(run, attributes):
+    (run.expects_call()
+        .with_args("mktemp")
+        .returns(run_result("foo")))
+    attributes.expects_call()
+    assert file.temp() == "foo"
+
+@patch("revolver.core._run")
+@patch("revolver.file.attributes")
+def test_temp_default_attributes(run, attributes):
+    run.expects_call().returns(run_result("path"))
+    attributes.expects_call().with_args("path", mode=None, owner=None, group=None)
+    file.temp()
+
+@patch("revolver.core._run")
+@patch("revolver.file.attributes")
+def test_temp_passes_attributes(run, attributes):
+    run.expects_call().returns(run_result("path"))
+    attributes.expects_call().with_args("path", mode="foo", owner="bar", group="baz")
+    file.temp("foo", "bar", "baz")
 
 @patch("revolver.core._run")
 def test_touch(run):

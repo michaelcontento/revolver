@@ -24,6 +24,11 @@ sed = inject_use_sudo(sed)
 uncomment = inject_use_sudo(uncomment)
 write = inject_use_sudo(write)
 
+def temp(mode=None, owner=None, group=None):
+    path = run('mktemp').stdout
+    attributes(path, mode=mode, owner=owner, group=group)
+    return path
+
 def remove(location, recursive=False, force=True):
     force = force and '-f' or ''
     recursive = recursive and '-r' or ''
