@@ -27,7 +27,7 @@ def test_revolver_is_just_a_wrapper():
     assert_contain_function_wrapped(file.uncomment, fabric.contrib.files.uncomment)
     assert_contain_function_wrapped(file.write, cuisine.file_write)
 
-@patch("revolver.core._run")
+@patch("revolver.core.run")
 @patch("revolver.file.attributes")
 def test_temp_calles_mktemp(run, attributes):
     (run.expects_call()
@@ -36,31 +36,31 @@ def test_temp_calles_mktemp(run, attributes):
     attributes.expects_call()
     assert file.temp() == "foo"
 
-@patch("revolver.core._run")
+@patch("revolver.core.run")
 @patch("revolver.file.attributes")
 def test_temp_default_attributes(run, attributes):
     run.expects_call().returns(run_result("path"))
     attributes.expects_call().with_args("path", mode=None, owner=None, group=None)
     file.temp()
 
-@patch("revolver.core._run")
+@patch("revolver.core.run")
 @patch("revolver.file.attributes")
 def test_temp_passes_attributes(run, attributes):
     run.expects_call().returns(run_result("path"))
     attributes.expects_call().with_args("path", mode="foo", owner="bar", group="baz")
     file.temp("foo", "bar", "baz")
 
-@patch("revolver.core._run")
+@patch("revolver.core.run")
 def test_touch(run):
     run.expects_call().with_args("touch path")
     file.touch("path")
 
-@patch("revolver.core._run")
+@patch("revolver.core.run")
 def test_remove_defaults(run):
     run.expects_call().with_args("rm -f  path")
     file.remove("path")
 
-@patch("revolver.core._run")
+@patch("revolver.core.run")
 def test_remove_recusrive(run):
     run.expects_call().with_args("rm -f  path")
     file.remove("path", recursive=False)
@@ -68,7 +68,7 @@ def test_remove_recusrive(run):
     run.expects_call().with_args("rm -f -r path")
     file.remove("path", recursive=True)
 
-@patch("revolver.core._run")
+@patch("revolver.core.run")
 def test_remove_force(run):
     run.expects_call().with_args("rm   path")
     file.remove("path", force=False)
@@ -76,24 +76,24 @@ def test_remove_force(run):
     run.expects_call().with_args("rm -f  path")
     file.remove("path", force=True)
 
-@patch("revolver.core._run")
+@patch("revolver.core.run")
 def test_copy(run):
     run.expects_call().with_args("cp -f src dst")
     file.copy("src", "dst")
 
-@patch("revolver.core._run")
+@patch("revolver.core.run")
 def test_copy_force_false(run):
     run.expects_call().with_args("cp  src dst")
     file.copy("src", "dst", force=False)
 
-@patch("revolver.core._run")
+@patch("revolver.core.run")
 @patch("revolver.file.attributes")
 def test_copy_default_attributes(run, attributes):
     run.expects_call()
     attributes.expects_call().with_args("dst", mode=None, owner=None, group=None)
     file.copy("src", "dst")
 
-@patch("revolver.core._run")
+@patch("revolver.core.run")
 @patch("revolver.file.attributes")
 def test_copy_default_attributes(run, attributes):
     run.expects_call()

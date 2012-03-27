@@ -16,14 +16,14 @@ def test_revolver_is_just_a_wrapper():
     assert_contain_function_wrapped(package.update,  cuisine.package_update)
     assert_contain_function_wrapped(package.upgrade, cuisine.package_upgrade)
 
-@patch("revolver.core._run")
+@patch("revolver.core.run")
 def test_is_installed(run):
     (run.expects_call()
         .with_args("dpkg -s foo")
         .returns("Status: foo installed"))
     assert package.is_installed("foo")
 
-@patch("revolver.core._run")
+@patch("revolver.core.run")
 def test_is_not_installed_without_status(run):
     (run.expects_call()
         .with_args("dpkg -s foo")
@@ -33,7 +33,7 @@ def test_is_not_installed_without_status(run):
 @patch("revolver.package.ensure")
 @patch("revolver.server.codename")
 @patch("revolver.file.exists")
-@patch("revolver.core._sudo")
+@patch("revolver.core.sudo")
 @patch("revolver.package.update")
 def test_install_ppa(ensure, codename, exists, sudo, update):
     ensure.expects_call().with_args("python-software-properties")

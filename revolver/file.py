@@ -14,7 +14,7 @@ from cuisine import file_update as update
 from cuisine import file_write as write
 from fabric.contrib.files import append, comment, contains, sed, uncomment
 
-from revolver.core import sudo, run
+from revolver import core
 from revolver.decorator import inject_use_sudo
 
 append = inject_use_sudo(append)
@@ -25,7 +25,7 @@ uncomment = inject_use_sudo(uncomment)
 write = inject_use_sudo(write)
 
 def temp(mode=None, owner=None, group=None):
-    path = run('mktemp').stdout
+    path = core.run('mktemp').stdout
     attributes(path, mode=mode, owner=owner, group=group)
     return path
 
@@ -33,13 +33,13 @@ def remove(location, recursive=False, force=True):
     force = force and '-f' or ''
     recursive = recursive and '-r' or ''
 
-    run('rm %s %s %s' % (force, recursive, location))
+    core.run('rm %s %s %s' % (force, recursive, location))
 
 def touch(location):
-    run('touch %s' % location)
+    core.run('touch %s' % location)
 
 def copy(source, destination, force=True, mode=None, owner=None, group=None):
     force = force and '-f' or ''
 
-    run('cp %s %s %s' % (force, source, destination))
+    core.run('cp %s %s %s' % (force, source, destination))
     attributes(destination, mode=mode, owner=owner, group=group)

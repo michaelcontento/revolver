@@ -30,7 +30,7 @@ def test_shell(get):
 @patch("revolver.log.abort")
 def test_shell_abort_on_error(get, abort):
     get.expects_call().with_args("user").returns(None)
-    abort.expects_call().with_args("user 'user' does not exists")
+    abort.expects_call().with_args("User 'user' does not exists")
     assert not user.shell("user")
 
 @patch("revolver.user.get")
@@ -42,5 +42,5 @@ def test_home_directory(get):
 @patch("revolver.log.abort")
 def test_home_directory_abort_on_error(get, abort):
     get.expects_call().with_args("user").returns(None)
-    abort.expects_call().with_args("user 'user' does not exists")
+    abort.expects_call().with_args("User 'user' does not exists")
     assert not user.home_directory("user")

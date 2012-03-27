@@ -12,7 +12,7 @@ from revolver import log
 def _get_with_abort(username):
     username_data = get(username)
     if username_data is None:
-        log.abort("user '%s' does not exists" % username)
+        log.abort("User '%s' does not exists" % username)
     return username_data
 
 def exists(username):
@@ -22,14 +22,14 @@ def exists(username):
     return True
 
 def home_directory(username):
-    data =_get_with_abort(username)
+    data = _get_with_abort(username)
     if not data:
         return None
     else:
         return data["home"]
 
 def shell(username):
-    data =_get_with_abort(username)
+    data = _get_with_abort(username)
     if not data:
         return None
     else:

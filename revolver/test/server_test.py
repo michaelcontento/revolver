@@ -22,14 +22,14 @@ def test_timezone(copy):
     copy.expects_call().with_args("/usr/share/zoneinfo/FOO", "/etc/localtime")
     server.timezone("FOO")
 
-@patch("revolver.core._run")
+@patch("revolver.core.run")
 def test_version(run):
     (run.expects_call()
         .with_args("lsb_release --release --short")
         .returns(run_result("foo")))
     assert server.version() == "foo"
 
-@patch("revolver.core._run")
+@patch("revolver.core.run")
 def test_codename(run):
     (run.expects_call()
         .with_args("lsb_release --codename --short")
