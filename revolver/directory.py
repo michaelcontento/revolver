@@ -16,7 +16,7 @@ def temp_local():
     return mkdtemp()
 
 def temp(mode=None, owner=None, group=None):
-    path = run('mktemp --directory')
+    path = run('mktemp --directory').stdout
     attributes(path, mode=mode, owner=owner, group=group)
     return path
 

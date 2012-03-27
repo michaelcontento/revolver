@@ -7,6 +7,8 @@ import cuisine
 
 from revolver import directory
 
+from .utils import run_result
+
 def test_revolver_is_just_a_wrapper():
     assert directory.attributes == cuisine.dir_attribs
     assert directory.attributes_get == cuisine.file_attribs_get
@@ -16,27 +18,29 @@ def test_revolver_is_just_a_wrapper():
 
 @patch("revolver.directory.mkdtemp")
 def test_temp_local(mkdtemp):
-    mkdtemp.expects_call().returns("path")
+    mkdtemp.expects_call().returns(run_result("path"))
     assert directory.temp_local() == "path"
 
 @patch("revolver.core._run")
 @patch("revolver.directory.attributes")
 def test_temp_calles_mktemp(run, attributes):
-    run.expects_call().with_args("mktemp --directory").returns("foo")
+    (run.expects_call()
+        .with_args("mktemp --directory")
+        .returns(run_result("foo")))
     attributes.expects_call()
     assert directory.temp() == "foo"
 
 @patch("revolver.core._run")
 @patch("revolver.directory.attributes")
 def test_temp_default_attributes(run, attributes):
-    run.expects_call().returns("path")
+    run.expects_call().returns(run_result("path"))
     attributes.expects_call().with_args("path", mode=None, owner=None, group=None)
     directory.temp()
 
 @patch("revolver.core._run")
 @patch("revolver.directory.attributes")
 def test_temp_passes_attributes(run, attributes):
-    run.expects_call().returns("path")
+    run.expects_call().returns(run_result("path"))
     attributes.expects_call().with_args("path", mode="foo", owner="bar", group="baz")
     directory.temp("foo", "bar", "baz")
 
