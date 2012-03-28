@@ -33,17 +33,11 @@ behaviour:
 
 The following tools are installed into the currently selected user:
 
-- awsenv
-- nodejs
-- nodejs\_nvm
-- php
-- php\_build
-- php\_phpenv
-- python
-- pythonbrew
-- ruby
-- ruby\_build
-- ruby\_rbenv
+- `awsenv`
+- `nodejs`, `nodejs_nvm`
+- `php`, `php_build` and `php_phpenv`
+- `python` and `pythonbrew`
+- `ruby`, `ruby_build` and `ruby_rbenv`
 
 As you might noticed: most of this are programming languages. And that for a
 good reason. Most of the time you simply *don't* want to change the used version
