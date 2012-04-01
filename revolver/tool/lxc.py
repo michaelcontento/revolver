@@ -24,7 +24,10 @@ _NETWORK_TEMPLATE = """\
 </network>
 """
 
-def install(name="lxc", subnet=42, _update=True):
+_DEFAULT_NAME = "lxc"
+_DEFAULT_SUBNET = 42
+
+def install(name=_DEFAULT_NAME, subnet=_DEFAULT_SUBNET, _update=True):
     packages = ["lxc", "debootstrap", "libvirt-bin"]
     if _update:
         package.install(packages)
@@ -43,7 +46,7 @@ def install(name="lxc", subnet=42, _update=True):
         config = _LXC_NETWORK % dict(name=name, subnet=subnet)
         file.write("/etc/lxc/net-lxc.conf", config, mode="a+r")
 
-def ensure(name, subnet):
+def ensure(name=_DEFAULT_NAME, subnet=_DEFAULT_SUBNET):
     install(name=name, subnet=subnet, _update=False)
 
 def _create_network(name, subnet):
