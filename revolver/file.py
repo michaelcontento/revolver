@@ -35,8 +35,9 @@ def remove(location, recursive=False, force=True):
 
     core.run('rm %s %s %s' % (force, recursive, location))
 
-def touch(location):
+def touch(location, mode=None, owner=None, group=None):
     core.run('touch %s' % location)
+    attributes(location, mode=mode, owner=owner, group=group)
 
 def copy(source, destination, force=True, mode=None, owner=None, group=None):
     force = force and '-f' or ''

@@ -56,6 +56,20 @@ def test_touch(run):
     file.touch("path")
 
 @patch("revolver.core.run")
+@patch("revolver.file.attributes")
+def test_touch_default_attributes(run, attributes):
+    run.expects_call().returns(run_result("path"))
+    attributes.expects_call().with_args("path", mode=None, owner=None, group=None)
+    file.touch("path")
+
+@patch("revolver.core.run")
+@patch("revolver.file.attributes")
+def test_touch_passes_attributes(run, attributes):
+    run.expects_call().returns(run_result("path"))
+    attributes.expects_call().with_args("path", mode="foo", owner="bar", group="baz")
+    file.touch("path", "foo", "bar", "baz")
+
+@patch("revolver.core.run")
 def test_remove_defaults(run):
     run.expects_call().with_args("rm -f  path")
     file.remove("path")
