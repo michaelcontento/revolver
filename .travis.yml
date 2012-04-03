@@ -8,4 +8,4 @@ install:
   - pip install . --use-mirrors
 script: nosetests
 after_script:
-  - pep8 --filename=\*.py .
+  - pep8 .
