@@ -10,7 +10,16 @@ from revolver import core
 
 def repository_name():
     command = "grep 'url' .git/config | cut -d':' -f2"
-    return core.local(command, capture=True)
+    name = core.local(command, capture=True)
+
+    # Get the basename (e.g. github/repo => repo)
+    name = name.split("/")[-1]
+
+    # Also strip the sometimes optional .git extension
+    if name.endswith(".git"):
+        name = name[:-4]
+
+    return name
 
 
 def create_archive(revision):

@@ -21,6 +21,18 @@ def test_repository_name(local):
     assert git.repository_name() == "bar"
 
 
+@patch("revolver.core.local")
+def test_repository_name_without_trailing_git(local):
+    local.expects_call().returns("bar.git")
+    assert git.repository_name() == "bar"
+
+
+@patch("revolver.core.local")
+def test_repository_name_without_leading_directories(local):
+    local.expects_call().returns("foo/faz/bar")
+    assert git.repository_name() == "bar"
+
+
 @patch("revolver.directory.temp_local")
 @patch("revolver.core.local")
 def test_archive(temp_local, local):
