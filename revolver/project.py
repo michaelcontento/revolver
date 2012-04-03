@@ -7,95 +7,139 @@ import os
 
 from revolver import contextmanager as ctx
 from revolver import directory as dir
-from revolver import file, git, log, user
-from revolver.core import put, run, sudo, local
+from revolver import file, git, core, command
 
 
-def deploy(owner, upload_hook=None, revision='HEAD', keep_versions=10):
-    if not user.exists(owner):
-        log.abort('Specified owner does not exists! Deploy aborted')
+class Deployinator(object):
+    def __init__(self, cwd=None, name=None):
+        self.cwd = cwd or core.run("pwd").stdout
+        self.name = name or git.repository_name()
+        self.releases_to_keep = 15
+        self.revision = "HEAD"
+        self._hooks = []
+        self._init_folders()
 
-    # Ensure some directories
-    paths = _ensure_layout(owner)
-    new_release_dir = _create_new_release_dir(owner, paths['releases'])
-    paths['new_release'] = new_release_dir
+    def add_hook(self, hook):
+        self._hooks.append(hook(self))
 
-    # Upload the new version and call the after upload hook
-    _upload(owner, new_release_dir, revision)
-    if upload_hook:
-        with ctx.sudo(owner):
-            with ctx.cd(new_release_dir):
-                upload_hook(owner, paths)
+    def dispatch_hook(self, name):
+        for hook in self._hooks:
+            method = getattr(hook, "on_%s" % name)
+            if method:
+                method()
 
-    # Activate the new release and
-    _symlink_release(owner, paths['current'], new_release_dir)
-    _clear_old_releases(paths['releases'], keep_versions)
+    def run(self):
+        self.dispatch_hook("before_layout")
+        try:
+            self._layout()
+            self.dispatch_hook("after_layout")
 
-    return paths
+            self.dispatch_hook("before_upload")
+            self._upload()
+            self.dispatch_hook("after_upload")
 
+            self.dispatch_hook("before_cleanup")
+            self._cleanup()
+            self.dispatch_hook("after_cleanup")
 
-def _ensure_layout(owner):
-    home_dir = user.home_directory(owner)
-    repo_name = git.repository_name()
+            self.dispatch_hook("before_activate")
+            self._activate()
+        except:
+            dir.remove(self.folders["releases.current"], recursive=True)
+            raise
+        self.dispatch_hook("after_activate")
 
-    join = os.path.join
-    project_dir = join(home_dir, repo_name)
+    def _init_folders(self):
+        project = os.path.join(self.cwd, self.name)
+        deploy = datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
 
-    paths = {
-        'project': join(project_dir),
-        'current': join(project_dir, 'current'),
-        'releases': join(project_dir, 'releases'),
-        'shared': join(project_dir, 'shared'),
-        'logs': join(project_dir, 'shared', 'logs'),
-        'temp': join(project_dir, 'shared', 'temp')
-    }
+        join = os.path.join
+        self.folders = {
+            "project": project,
+            "current": join(project, "current"),
+            "releases": join(project, "releases"),
+            "releases.current": join(project, "releases", deploy),
+            "shared": join(project, "shared"),
+            "shared.logs": join(project, "shared", "logs"),
+            "shared.temp": join(project, "shared", "temp"),
+            "shared.run": join(project, "shared", "run")
+        }
 
-    with ctx.sudo(owner):
-        for path in paths.itervalues():
-            if dir.exists(path):
-                continue
-            dir.create(path, recursive=True)
+    def _layout(self):
+        current_user = core.run("echo $USER").stdout
 
-    return paths
-
-
-def _create_new_release_dir(owner, base_dir):
-    date_dir = datetime.utcnow().strftime('%Y%m%d%H%M%S')
-    release_dir = os.path.join(base_dir, date_dir)
-
-    with ctx.sudo(owner):
-        dir.create(release_dir)
-
-    return release_dir
-
-
-def _upload(owner, upload_dir, revision):
-    tmp_tar = git.create_archive(revision)
-
-    try:
-        with ctx.cd(upload_dir):
-            with ctx.sudo():
-                put(tmp_tar, 'deploy.tar.gz')
-                file.attributes('deploy.tar.gz', owner=owner)
-
-            with ctx.sudo(owner):
-                run('tar -xzf deploy.tar.gz')
-                file.remove('deploy.tar.gz')
-                file.write('VERSION', git.revparse(revision))
-    finally:
-        local('rm -rf %s' % tmp_tar)
+        for path in self.folders.itervalues():
+            if not dir.exists(path):
+                dir.create(path, recursive=True)
+            else:
+                dir.attributes(path, owner=current_user, recursive=True)
 
 
-def _symlink_release(owner, current_dir, release_dir):
-    with ctx.sudo(owner):
-        if dir.exists(current_dir):
-            dir.remove(current_dir, recursive=True)
-        file.link(release_dir, current_dir)
+    def _upload(self):
+        # TODO Warn if there are local changes
+        tmp_tar = git.create_archive(self.revision)
+
+        try:
+            with ctx.cd(self.folders["releases.current"]):
+                core.put(tmp_tar, "deploy.tar.gz")
+                core.run("tar -xzf deploy.tar.gz")
+                file.remove("deploy.tar.gz")
+
+                file.write("VERSION", git.revparse(self.revision))
+        finally:
+            core.local("rm -rf %s" % tmp_tar)
+
+    def _cleanup(self):
+        with ctx.cd(self.folders["releases"]):
+            core.run("ls -1 | sort -V | head -n-%s | xargs -l1 rm -rf"
+                % self.releases_to_keep)
+
+    def _activate(self):
+        file.link(self.folders["releases.current"], self.folders["current"])
 
 
-def _clear_old_releases(directory, keep):
-    with ctx.cd(directory):
-        sudo(
-            'ls -1 | sort -V | head -n-%s | xargs -l1 rm -rf'
-            % keep
-        )
+class BaseHook(object):
+    def __init__(self, deployinator):
+        self.deployinator = deployinator
+
+    def __getattr__(self, name):
+        if name.startswith("on_"):
+            return None
+        return getattr(self.deployinator, name)
+
+
+class AutoDependencyHook(BaseHook):
+    def on_after_upload(self):
+        self.dispatch_hook("before_dependencies")
+        self._dependencies()
+        self.dispatch_hook("after_dependencies")
+
+    def _dependencies(self):
+        with ctx.cd(self.folders["releases.current"]):
+            if file.exists("package.json"):
+                self._dependencies_package_json()
+
+            if file.exists("Gemfile"):
+                self._dependencies_gemfile()
+
+            if file.exists("setup.py"):
+                self._dependencies_setup_py()
+
+            if file.exists("requirements.txt"):
+                self._dependencies_requirements_txt()
+
+    def _dependencies_package_json(self):
+        if command.exists("npm"):
+            core.run("npm install")
+
+    def _dependencies_gemfile(self):
+        if command.exists("bundle"):
+            core.run("bundle")
+
+    def _dependencies_setup_py(self):
+        # TODO Implement setup.py resolution
+        pass
+
+    def _dependencies_requirements_txt(self):
+        if command.exists("pip"):
+            core.run("pip install -r requirements.txt --use-mirrors")
