@@ -7,6 +7,7 @@ from revolver import contextmanager as ctx
 from revolver import directory as dir
 from revolver import package
 
+
 def install():
     package.ensure(["curl", "git-core"])
 
@@ -17,6 +18,7 @@ def install():
         run("git pull")
         dir.create("versions")
         dir.create("tmp")
+
 
 def ensure():
     if not dir.exists(".php-build"):

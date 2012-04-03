@@ -5,6 +5,7 @@ from __future__ import absolute_import, division, with_statement
 from revolver.core import run
 from revolver.tool import nodejs_nvm
 
+
 def install(version, _update=True):
     nodejs_nvm.ensure()
 
@@ -16,6 +17,7 @@ def install(version, _update=True):
         run("nvm install %s > /dev/null" % version)
 
     run("nvm alias default %s" % version)
+
 
 def ensure(version):
     install(version, _update=False)

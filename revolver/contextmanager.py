@@ -9,6 +9,7 @@ from fabric.context_managers import cd, hide, lcd, path, prefix, settings, show
 from revolver import user
 from revolver.core import env
 
+
 @contextmanager
 def sudo(username=None, login=False):
     old_forced = env.sudo_forced

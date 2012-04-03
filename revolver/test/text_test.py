@@ -7,6 +7,7 @@ import fabric
 
 from revolver import text
 
+
 def test_revolver_is_just_a_wrapper():
     assert text.detect_eol == cuisine.text_detect_eol
     assert text.ensure_line == cuisine.text_ensure_line

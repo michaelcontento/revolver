@@ -10,6 +10,7 @@ from revolver import directory as dir
 from revolver import file, git, log, user
 from revolver.core import put, run, sudo, local
 
+
 def deploy(owner, upload_hook=None, revision='HEAD', keep_versions=10):
     if not user.exists(owner):
         log.abort('Specified owner does not exists! Deploy aborted')
@@ -32,6 +33,7 @@ def deploy(owner, upload_hook=None, revision='HEAD', keep_versions=10):
 
     return paths
 
+
 def _ensure_layout(owner):
     home_dir = user.home_directory(owner)
     repo_name = git.repository_name()
@@ -40,12 +42,12 @@ def _ensure_layout(owner):
     project_dir = join(home_dir, repo_name)
 
     paths = {
-        'project':  join(project_dir),
-        'current':  join(project_dir, 'current'),
+        'project': join(project_dir),
+        'current': join(project_dir, 'current'),
         'releases': join(project_dir, 'releases'),
-        'shared':   join(project_dir, 'shared'),
-        'logs':     join(project_dir, 'shared', 'logs'),
-        'temp':     join(project_dir, 'shared', 'temp')
+        'shared': join(project_dir, 'shared'),
+        'logs': join(project_dir, 'shared', 'logs'),
+        'temp': join(project_dir, 'shared', 'temp')
     }
 
     with ctx.sudo(owner):
@@ -56,6 +58,7 @@ def _ensure_layout(owner):
 
     return paths
 
+
 def _create_new_release_dir(owner, base_dir):
     date_dir = datetime.utcnow().strftime('%Y%m%d%H%M%S')
     release_dir = os.path.join(base_dir, date_dir)
@@ -64,6 +67,7 @@ def _create_new_release_dir(owner, base_dir):
         dir.create(release_dir)
 
     return release_dir
+
 
 def _upload(owner, upload_dir, revision):
     tmp_tar = git.create_archive(revision)
@@ -81,11 +85,13 @@ def _upload(owner, upload_dir, revision):
     finally:
         local('rm -rf %s' % tmp_tar)
 
+
 def _symlink_release(owner, current_dir, release_dir):
     with ctx.sudo(owner):
         if dir.exists(current_dir):
             dir.remove(current_dir, recursive=True)
         file.link(release_dir, current_dir)
+
 
 def _clear_old_releases(directory, keep):
     with ctx.cd(directory):

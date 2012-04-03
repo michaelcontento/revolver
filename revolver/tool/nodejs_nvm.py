@@ -7,6 +7,7 @@ from revolver import contextmanager as ctx
 from revolver import directory as dir
 from revolver import package
 
+
 def install():
     package.ensure(["git-core", "libssl-dev", "curl", "build-essential"])
 
@@ -16,6 +17,7 @@ def install():
 
     with ctx.cd(".nvm"):
         run("git pull")
+
 
 def ensure():
     if not dir.exists(".nvm"):

@@ -6,6 +6,7 @@ from revolver.core import run
 from revolver import package
 from revolver.tool import pythonbrew
 
+
 def install(version, _update=True):
     # Without this we would build python without the bz2 package
     package.ensure("libbz2-dev")
@@ -21,6 +22,6 @@ def install(version, _update=True):
     run("pip install virtualenv")
     run("pip install virtualenvwrapper")
 
+
 def ensure(version):
     install(version, _update=False)
-

@@ -10,10 +10,11 @@ from cuisine import package_upgrade as upgrade
 from revolver import contextmanager as ctx
 from revolver import file, server, core, decorator
 
-ensure  = decorator.multiargs(decorator.sudo(ensure ))
+ensure = decorator.multiargs(decorator.sudo(ensure))
 install = decorator.multiargs(decorator.sudo(install))
-update  = decorator.multiargs(decorator.sudo(update ))
-upgrade =                     decorator.sudo(upgrade)
+update = decorator.multiargs(decorator.sudo(update))
+upgrade = decorator.sudo(upgrade)
+
 
 def is_installed(name):
     with ctx.settings(warn_only=True):
@@ -24,6 +25,7 @@ def is_installed(name):
                 if "installed" in status.split(" "):
                     return True
         return False
+
 
 def install_ppa(name):
     ensure("python-software-properties")

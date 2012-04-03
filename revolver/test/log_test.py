@@ -6,6 +6,7 @@ import fabric
 
 from revolver import log
 
+
 def test_revolver_is_just_a_wrapper():
     assert log.confirm == fabric.contrib.console.confirm
     assert log.abort == fabric.utils.abort

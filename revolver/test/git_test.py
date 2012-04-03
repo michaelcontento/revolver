@@ -6,17 +6,20 @@ from fudge import patch
 
 from revolver import git
 
+
 @patch("revolver.core.local")
 def test_revparse(local):
     cmd = "git rev-parse foo"
     local.expects_call().with_args(cmd, capture=True).returns("bar")
     assert git.revparse("foo") == "bar"
 
+
 @patch("revolver.core.local")
 def test_repository_name(local):
     cmd = "grep 'url' .git/config | cut -d':' -f2"
     local.expects_call().with_args(cmd, capture=True).returns("bar")
     assert git.repository_name() == "bar"
+
 
 @patch("revolver.directory.temp_local")
 @patch("revolver.core.local")

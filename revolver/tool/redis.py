@@ -10,6 +10,7 @@ from revolver.core import sudo, run
 _VERSION = '2.4'
 _OPTIONS = ''
 
+
 def install(version=_VERSION, options=_OPTIONS):
     package.ensure(['git-core', 'build-essential'])
     tmpdir = dir.temp()
@@ -22,6 +23,7 @@ def install(version=_VERSION, options=_OPTIONS):
             sudo('make install')
     finally:
         dir.remove(tmpdir, recursive=True)
+
 
 def ensure(version=_VERSION, options=_OPTIONS):
     # TODO Check if version if fulfilled

@@ -4,11 +4,13 @@ from __future__ import absolute_import, division, with_statement
 
 from functools import wraps
 
-from fabric.decorators import task, hosts, roles, runs_once, serial, parallel, with_settings
+from fabric.decorators import (task, hosts, roles, runs_once, serial,
+    parallel, with_settings)
 from fabric.network import needs_host
 
 from revolver.core import env
 from revolver import contextmanager as ctx
+
 
 def sudo(func):
     @wraps(func)
@@ -16,6 +18,7 @@ def sudo(func):
         with ctx.sudo():
             func(*args, **kwargs)
     return wrapper
+
 
 def multiargs(func):
     @wraps(func)
@@ -29,6 +32,7 @@ def multiargs(func):
         else:
             return func(arg, *args, **kwargs)
     return wrapper
+
 
 def inject_use_sudo(func):
     @wraps(func)

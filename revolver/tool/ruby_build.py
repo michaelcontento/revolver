@@ -8,6 +8,7 @@ from revolver import package
 from revolver.core import run
 from revolver.tool import ruby_rbenv
 
+
 def install():
     package.ensure("git-core")
     ruby_rbenv.ensure()
@@ -20,6 +21,7 @@ def install():
 
         with ctx.cd("ruby-build"):
             run("git pull")
+
 
 def ensure():
     if not dir.exists(".rbenv/plugins/ruby-build"):

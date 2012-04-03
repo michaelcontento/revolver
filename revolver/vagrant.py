@@ -8,8 +8,10 @@ from revolver import contextmanager as ctx
 from revolver import directory as dir
 from revolver import log, user, core
 
+
 def inside():
     return dir.exists("/vagrant") and user.exists("vagrant")
+
 
 def is_running():
     with ctx.settings(warn_only=True):
@@ -20,6 +22,7 @@ def is_running():
         return False
 
     return True
+
 
 def select():
     if not is_running():

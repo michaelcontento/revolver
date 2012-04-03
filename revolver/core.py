@@ -18,17 +18,20 @@ env.sudo_user = None
 
 put = inject_use_sudo(put)
 
+
 def run(*args, **kwargs):
     if not env.sudo_forced:
         return _run(*args, **kwargs)
 
     return sudo(*args, **kwargs)
 
+
 def sudo(*args, **kwargs):
     if env.sudo_user:
         kwargs['user'] = env.sudo_user
 
     return _sudo(*args, **kwargs)
+
 
 # Monkeypatch sudo/run into fabric/cuisine
 for module in ("fabric.api", "fabric.operations", "cuisine"):

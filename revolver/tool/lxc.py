@@ -27,6 +27,7 @@ _NETWORK_TEMPLATE = """\
 _DEFAULT_NAME = "lxc"
 _DEFAULT_SUBNET = 42
 
+
 def install(name=_DEFAULT_NAME, subnet=_DEFAULT_SUBNET, _update=True):
     packages = ["lxc", "debootstrap", "libvirt-bin"]
     if _update:
@@ -46,8 +47,10 @@ def install(name=_DEFAULT_NAME, subnet=_DEFAULT_SUBNET, _update=True):
         config = _LXC_NETWORK % dict(name=name, subnet=subnet)
         file.write("/etc/lxc/net-lxc.conf", config, mode="a+r")
 
+
 def ensure(name=_DEFAULT_NAME, subnet=_DEFAULT_SUBNET):
     install(name=name, subnet=subnet, _update=False)
+
 
 def _create_network(name, subnet):
     tempfile = file.temp()
@@ -58,6 +61,7 @@ def _create_network(name, subnet):
         core.run("virsh net-autostart %s" % name)
     finally:
         file.remove(tempfile)
+
 
 def _list_networks():
     """Return a dictionary of network name to active status bools.

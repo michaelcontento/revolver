@@ -8,6 +8,7 @@ from revolver import directory as dir
 from revolver import file, package
 from revolver.tool import php_build, php_phpenv
 
+
 def install(version, fpm=False, xdebug=False):
     php_build.ensure()
     php_phpenv.ensure()
@@ -20,6 +21,7 @@ def install(version, fpm=False, xdebug=False):
     run("phpenv rehash")
     _install_apc()
     _install_composer()
+
 
 def _install_php(version, fpm, xdebug):
     package.ensure([
@@ -38,7 +40,7 @@ def _install_php(version, fpm, xdebug):
     prefix = "$HOME/.phpenv/versions/%s" % version
 
     # Force the usage of pear because pyrus is unable to install APC
-    # See: https://github.com/CHH/php-build/blob/master/man/php-build.1.ronn#L79
+    # See https://github.com/CHH/php-build/blob/master/man/php-build.1.ronn#L79
     pear_path = "%s/pear" % prefix
     pear = configure("--with-pear=%s" % pear_path)
     dir.ensure(pear_path)
@@ -48,8 +50,8 @@ def _install_php(version, fpm, xdebug):
     # - FPM is a very common flag
     #
     # But if you want to configure php even further? Own definition files!
-    # See: https://github.com/CHH/php-build/blob/master/man/php-build.1.ronn#L54
-    fpm    = (fpm and configure("--enable-fpm")) or "true"
+    # See https://github.com/CHH/php-build/blob/master/man/php-build.1.ronn#L54
+    fpm = (fpm and configure("--enable-fpm")) or "true"
     xdebug = (xdebug and "true") or "export PHP_BUILD_XDEBUG_ENABLE = 'off'"
 
     with ctx.prefix(pear):
@@ -62,6 +64,7 @@ def _install_php(version, fpm, xdebug):
     with ctx.cd(prefix):
         run('find sbin/ -type f -exec ln -sf "$(pwd)/{}" -t "$(pwd)/bin" \;')
 
+
 def _install_apc():
     installed = run("pecl list | grep -i apc; true")
     if installed:
@@ -72,6 +75,7 @@ def _install_apc():
     bin_path = run("phpenv which php")
     conf_path = bin_path.replace("/bin/php", "/etc/conf.d")
     file.write(conf_path + "/apc.ini", "extension=apc.so")
+
 
 def _install_composer():
     # TODO Implement this

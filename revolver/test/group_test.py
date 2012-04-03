@@ -6,6 +6,7 @@ import cuisine
 
 from revolver import group
 
+
 def test_revolver_is_just_a_wrapper():
     assert group.get == cuisine.group_check
     assert group.create == cuisine.group_create

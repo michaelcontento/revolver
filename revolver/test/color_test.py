@@ -6,6 +6,7 @@ import fabric
 
 from revolver import color
 
+
 def test_revolver_is_just_a_wrapper():
     assert color.blue == fabric.colors.blue
     assert color.cyan == fabric.colors.cyan

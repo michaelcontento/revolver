@@ -7,6 +7,7 @@ from revolver import command, file, package, server, service
 from revolver import contextmanager as ctx
 from revolver import directory as dir
 
+
 def install():
     already_installed = package.is_installed('nginx')
 
@@ -26,23 +27,28 @@ def install():
 
     restart()
 
+
 def ensure():
     if command.exists('nginx'):
         return
 
     install()
 
+
 def restart():
     service.restart('nginx')
 
+
 def reload():
     service.reload('nginx')
+
 
 def site_disable(site):
     with ctx.sudo():
         with ctx.cd('/etc/nginx/sites-enabled'):
             file.remove(site)
             reload()
+
 
 def site_enable(site):
     site_available = '/etc/nginx/sites-available/%s' % site
@@ -51,6 +57,7 @@ def site_enable(site):
     with ctx.sudo():
         file.link(site_available, site_enabled)
         reload()
+
 
 def site_ensure(site, lines):
     with ctx.sudo():
