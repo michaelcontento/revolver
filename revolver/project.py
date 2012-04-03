@@ -74,7 +74,6 @@ class Deployinator(object):
             else:
                 dir.attributes(path, owner=current_user, recursive=True)
 
-
     def _upload(self):
         # TODO Warn if there are local changes
         tmp_tar = git.create_archive(self.revision)
