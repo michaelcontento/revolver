@@ -56,7 +56,7 @@ repository but it should be easy to get everything running:
 
 Or use the new alternate installer [Pip][]:
 
-    sudo pip https://github.com/michaelcontento/revolver/tarball/master#egg=revolver
+    sudo pip install https://github.com/michaelcontento/revolver/tarball/master#egg=revolver
 
 Now [Revolver][] is installed and ready to use. But I would suggest to 
 first read the documentation from [Fabric][] to get used with the whole 
