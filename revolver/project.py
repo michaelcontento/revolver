@@ -3,7 +3,7 @@
 from __future__ import absolute_import, division, with_statement
 
 from datetime import datetime
-import os
+import posixpath
 
 from revolver import contextmanager as ctx
 from revolver import directory as dir
@@ -50,10 +50,10 @@ class Deployinator(object):
         self.dispatch_hook("after_activate")
 
     def _init_folders(self):
-        project = os.path.join(self.cwd, self.name)
+        project = posixpath.join(self.cwd, self.name)
         deploy = datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
 
-        join = os.path.join
+        join = posixpath.join
         self.folders = {
             "project": project,
             "current": join(project, "current"),
