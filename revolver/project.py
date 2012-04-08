@@ -68,9 +68,10 @@ class Deployinator(object):
     def _layout(self):
         current_user = core.run("echo $USER").stdout
 
-        for path in self.folders.itervalues():
+        for type, path in self.folders.iteritems():
             if not dir.exists(path):
-                dir.create(path, recursive=True)
+                if type != "current":
+                    dir.create(path, recursive=True)
             else:
                 dir.attributes(path, owner=current_user, recursive=True)
 
