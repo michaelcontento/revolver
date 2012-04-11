@@ -10,7 +10,5 @@ def install():
 
 
 def ensure():
-    if command.exists("memcached"):
-        return
-
-    install()
+    if not command.exists("memcached"):
+        install()
