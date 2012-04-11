@@ -52,7 +52,7 @@ def _install_php(version, fpm, xdebug):
     # But if you want to configure php even further? Own definition files!
     # See https://github.com/CHH/php-build/blob/master/man/php-build.1.ronn#L54
     fpm = (fpm and configure("--enable-fpm")) or "true"
-    xdebug = (xdebug and "true") or "export PHP_BUILD_XDEBUG_ENABLE = 'off'"
+    xdebug = (xdebug and "true") or "export PHP_BUILD_XDEBUG_ENABLE=\"off\""
 
     with ctx.prefix(pear):
         with ctx.prefix(xdebug):
