@@ -43,7 +43,7 @@ def _install_php(version, fpm, xdebug):
     # See https://github.com/CHH/php-build/blob/master/man/php-build.1.ronn#L79
     pear_path = "%s/pear" % prefix
     pear = configure("--with-pear=%s" % pear_path)
-    dir.ensure(pear_path)
+    dir.ensure(pear_path, recursive=True)
 
     # We only support this two configuration options! Why?
     # - Xdebug is already integrated into php-build
