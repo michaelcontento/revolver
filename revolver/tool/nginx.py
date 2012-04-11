@@ -29,10 +29,8 @@ def install():
 
 
 def ensure():
-    if command.exists('nginx'):
-        return
-
-    install()
+    if not command.exists('nginx'):
+        install()
 
 
 def restart():

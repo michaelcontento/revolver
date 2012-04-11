@@ -84,10 +84,8 @@ def ensure(server=False, password=None):
     if server and not command.exists("mysqld"):
         commands_found = False
 
-    if commands_found:
-        return
-
-    install(server=server, password=password)
+    if not commands_found:
+        install(server=server, password=password)
 
 
 def ensure_database(name, charset=None, collate=None):
