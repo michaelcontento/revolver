@@ -1,0 +1,164 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Revolver by michaelcontento</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/michaelcontento/revolver">Fork On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/michaelcontento/revolver/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/michaelcontento/revolver/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Revolver</h1>
+          <p>Pythonic server orchestrating based on fabric / cuisine</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/michaelcontento">michaelcontento</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h2>About</h2>
+
+<p><em>TL;DR Wrapper for <a href="https://github.com/fabric/fabric">Fabric</a> and <a href="https://github.com/sebastien/cuisine">Cuisine</a> to achieve a clean, simple and
+fun to use interface amplified with new high-level functions to quickly 
+orchestrate your servers.</em></p>
+
+<hr><p>Let me introduce you two other awesome tools / libraries, before I try to 
+explain the gap <a href="https://github.com/michaelcontento/revolver">Revolver</a> tries to fill. First there is <a href="https://github.com/fabric/fabric">Fabric</a>, a very 
+small and low-level wrapper around SSH written in <a href="http://python.org">Python</a>. It allows you to 
+store a small <em>fabfile.py</em> next to your project, where you can define all the 
+steps required to automate something via SSH on one to multiple servers (e.g. 
+install and configure your software stack, deploy new versions, ...). </p>
+
+<p>But <a href="https://github.com/fabric/fabric">Fabric</a> is <em>really</em> low-level and there is a lack of fun. That's the 
+point where <a href="https://github.com/sebastien/cuisine">Cuisine</a> joins the ring, because it's a collection of useful 
+methods which really increases your amount of fun and pleasure. Unfortunately 
+with some small, but really annoying, differences that are sometimes even 
+incompatible. Some examples? </p>
+
+<pre><code># Fabric
+run('apt-get install XYZ', use_sudo=True)
+
+# Cuisine
+with mode_sudo():
+    run('apt-get install XYZ')
+</code></pre>
+
+<p>I really enjoy the contextmanager for running a block as superuser! But 
+<a href="https://github.com/sebastien/cuisine">Cuisine</a> didn't patch all commands provided by <a href="https://github.com/fabric/fabric">Fabric</a> (<code>run()</code> in the 
+example is patched but other commands, like <code>put()</code>, aren't and you'll run into 
+strange / annoying errors). </p>
+
+<p>There is also a different scheme of naming things. <a href="https://github.com/fabric/fabric">Fabric</a> tends to use short 
+function names inside clean namespaces (e.g <code>fabric.contrib.files.append</code>). 
+But the API of <a href="https://github.com/sebastien/cuisine">Cuisine</a>, on the other hand, follows <code>&lt;object&gt;_&lt;operation&gt;</code>
+(e.g. <code>cuisine.file_append</code>). </p>
+
+<p>Both ways are reasonable and I don't wanna blame someone! Don't get me wrong!
+I simply want a "cleaner" or "more compatible" API which I can extend with my
+own new functions and keep the level of fun and pleasure high (at least for
+me). And the last sentence is a short / good description of what <a href="https://github.com/michaelcontento/revolver">Revolver</a> 
+is about. Just a "unification" wrapper for <a href="https://github.com/fabric/fabric">Fabric</a> and <a href="https://github.com/sebastien/cuisine">Cuisine</a> with some 
+new batteries included.</p>
+
+<h2>Getting started</h2>
+
+<p>This project is currently not published to the official python package 
+repository but it should be easy to get everything running:</p>
+
+<pre><code>sudo easy_install <a href="https://github.com/michaelcontento/revolver/tarball/master">https://github.com/michaelcontento/revolver/tarball/master</a>
+</code></pre>
+
+<p>Or use the new alternate installer <a href="http://www.pip-installer.org">Pip</a>:</p>
+
+<pre><code>sudo pip install <a href="https://github.com/michaelcontento/revolver/tarball/master#egg=revolver">https://github.com/michaelcontento/revolver/tarball/master#egg=revolver</a>
+</code></pre>
+
+<p>Now <a href="https://github.com/michaelcontento/revolver">Revolver</a> is installed and ready to use. But I would suggest to 
+first read the documentation from <a href="https://github.com/fabric/fabric">Fabric</a> to get used with the whole 
+workflow / principle. After that it should be easy for you to dig into the 
+code, discover everything and write your first own <code>fabfile.py</code>. </p>
+
+<h2>Example</h2>
+
+<p>But for those who want to see fast results, here is a small example 
+<code>fabfile.py</code>.</p>
+
+<pre><code># -*- coding: utf-8 -*-
+
+from revolver import user
+from revolver import contextmanager as ctx
+from revolver.project import Deployinator
+from revolver.core import env
+from revolver.tool import php
+from revolver.tool import ruby
+
+env.hosts = ['user@example.com']
+
+def setup():
+    php.install(version='5.3.9')
+    ruby.ensure(version='1.9.2-p290')
+    user.ensure('own-user', home='/var/own-user')
+
+def deploy():
+    with ctx.sudo(username='own-user'):
+        dp = Deployinator()
+        dp.run()
+</code></pre>
+
+<h2>Contributing</h2>
+
+<ul>
+<li>Fork this project</li>
+<li>Make your changes (new features, bugfixes, examples, ...)</li>
+<li>Write tests for it </li>
+<li>Be sure that <em>all other</em> tests are still green</li>
+<li>Send me a pull request</li>
+</ul><p>Too complicated? You just wanna mess around for yourself? Thats fine! Just 
+skip everything after step two :)</p>
+
+<h2>License</h2>
+
+<pre><code>Copyright 2009-2012 Michael Contento &lt;michaelcontento@gmail.com&gt;
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    <a href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a>
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+</code></pre>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
+    
+  </body>
+</html>
