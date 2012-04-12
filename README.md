@@ -83,9 +83,9 @@ But for those who want to see fast results, here is a small example
         php.install(version='5.3.9')
         ruby.ensure(version='1.9.2-p290')
         user.ensure('own-user', home='/var/own-user')
-        
+
     def deploy():
-        with ctx.sudo('own-user'):
+        with ctx.sudo(username='own-user'):
             dp = Deployinator()
             dp.run()
 
