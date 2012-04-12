@@ -70,8 +70,9 @@ But for those who want to see fast results, here is a small example
 
     # -*- coding: utf-8 -*-
 
-    from revolver import project
     from revolver import user
+    from revolver import contextmanager as ctx
+    from revolver.project import Deployinator
     from revolver.core import env
     from revolver.tool import php
     from revolver.tool import ruby
@@ -79,12 +80,14 @@ But for those who want to see fast results, here is a small example
     env.hosts = ['user@example.com']
 
     def setup():
-        php.ensure()
-        ruby.ensure()
+        php.install(version='5.3.9')
+        ruby.ensure(version='1.9.2-p290')
         user.ensure('own-user', home='/var/own-user')
-        
+
     def deploy():
-        project.deploy(owner='own-user')
+        with ctx.sudo(username='own-user'):
+            dp = Deployinator()
+            dp.run()
 
 ## Contributing
 
