@@ -11,6 +11,10 @@ from revolver.tool import ruby_rbenv
 
 def install():
     package.ensure("git-core")
+    package.ensure([
+        "build-essential", "zlib1g-dev", "libssl-dev",
+        "libxml2-dev", "libsqlite3-dev"
+    ])
     ruby_rbenv.ensure()
 
     dir.ensure(".rbenv/plugins")
