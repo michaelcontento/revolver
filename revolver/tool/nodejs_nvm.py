@@ -29,4 +29,3 @@ def ensure():
 
 def _ensure_autoload(filename):
     file.append(filename, 'source "$HOME/.nvm/nvm.sh"')
-

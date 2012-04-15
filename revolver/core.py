@@ -36,6 +36,8 @@ def sudo(*args, **kwargs):
 # Monkeypatch sudo/run into fabric/cuisine
 # TODO Added fabric.contrib.files because it was still wrong. Do we need to
 #      patch even more places? Wrong import-order used? Investigate here!
-for module in ("fabric.api", "fabric.contrib.files", "fabric.operations", "cuisine"):
+from fabric.contrib import files as _files
+for module in ("fabric.api", "fabric.contrib.files",
+               "fabric.operations", "cuisine"):
     setattr(sys.modules[module], "run", run)
     setattr(sys.modules[module], "sudo", sudo)
