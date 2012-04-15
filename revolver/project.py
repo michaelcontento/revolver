@@ -85,7 +85,10 @@ class Deployinator(object):
                 core.run("tar -xzf deploy.tar.gz")
                 file.remove("deploy.tar.gz")
 
-                file.write("VERSION", git.revparse(self.revision))
+                # TODO Fix file.write(). Sometimes the temp-file workaround of
+                #      Fabric seems to be broken. Uncomment the following line
+                #      after everything is fixed.
+                # file.write("VERSION", git.revparse(self.revision))
         finally:
             core.local("rm -rf %s" % tmp_tar)
 
