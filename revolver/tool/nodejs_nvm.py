@@ -18,7 +18,15 @@ def install():
     with ctx.cd(".nvm"):
         run("git pull")
 
+    _ensure_autoload(".bashrc")
+    _ensure_autoload(".zshrc")
+
 
 def ensure():
     if not dir.exists(".nvm"):
         install()
+
+
+def _ensure_autoload(filename):
+    file.append(filename, 'source "$HOME/.nvm/nvm.sh"')
+
