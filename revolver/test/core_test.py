@@ -16,8 +16,6 @@ def test_revolver_is_just_a_wrapper():
     assert core.get == fabric.api.get
     assert core.local == fabric.api.local
 
-    assert_contain_function_wrapped(core.put, fabric.api.put)
-
 
 def test_environment_default_values():
     assert not core.env.sudo_forced
@@ -58,3 +56,15 @@ def test_inject_user_for_sudo_via_env(_sudo):
     core.env.sudo_user = "bar"
     core.sudo("foo")
     core.env.sudo_user = None
+
+
+@patch("revolver.core._put")
+def test_put_does_not_pass_any_default_args(_put):
+    _put.expects_call().with_args()
+    core.put()
+
+
+@patch("revolver.core._put")
+def test_put_passes_any_given_args(_put):
+    _put.expects_call().with_args("foo", baz="bar")
+    core.put("foo", baz="bar")

@@ -7,8 +7,10 @@ import sys
 import cuisine
 from fabric.api import run as _run
 from fabric.api import sudo as _sudo
-from fabric.api import local, get, env, put
+from fabric.api import put as _put
+from fabric.api import local, get, env
 
+from revolver import contextmanager as _ctx
 from revolver.decorator import inject_use_sudo
 
 VERSION = '0.0.4'
@@ -16,7 +18,11 @@ VERSION = '0.0.4'
 env.sudo_forced = False
 env.sudo_user = None
 
-put = inject_use_sudo(put)
+
+@inject_use_sudo
+def put(*args, **kwargs):
+    with _ctx.unpatched_state():
+        return _put(*args, **kwargs)
 
 
 def run(*args, **kwargs):
