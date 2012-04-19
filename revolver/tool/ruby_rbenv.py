@@ -13,10 +13,9 @@ def install():
 
     if not dir.exists(".rbenv"):
         run("git clone git://github.com/sstephenson/rbenv.git .rbenv")
-        return
-
-    with ctx.cd(".rbenv"):
-        run("git pull")
+    else:
+        with ctx.cd(".rbenv"):
+            run("git pull")
 
     _ensure_autoload(".bashrc")
     _ensure_autoload(".zshrc")

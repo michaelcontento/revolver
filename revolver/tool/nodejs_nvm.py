@@ -13,10 +13,9 @@ def install():
 
     if not dir.exists(".nvm"):
         run("git clone git://github.com/creationix/nvm.git .nvm")
-        return
-
-    with ctx.cd(".nvm"):
-        run("git pull")
+    else:
+        with ctx.cd(".nvm"):
+            run("git pull")
 
     _ensure_autoload(".bashrc")
     _ensure_autoload(".zshrc")
