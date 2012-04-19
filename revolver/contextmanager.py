@@ -29,3 +29,20 @@ def sudo(username=None, login=False):
     env.sudo_forced = old_forced
     env.sudo_user = old_user
     env.shell = old_shell
+
+
+@contextmanager
+def unpatched_state():
+    old_shell = env.shell
+    old_sudo_forced = env.sudo_forced
+    old_sudo_user = env.sudo_user
+
+    env.shell = "/bin/bash -l -c"
+    env.sudo_forced = False
+    env.sudo_user = None
+
+    yield
+
+    env.shell = old_shell
+    env.sudo_forced = old_sudo_forced
+    env.sudo_user = old_sudo_user
