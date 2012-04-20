@@ -20,7 +20,8 @@ class Deployinator(object):
         self._init_folders()
 
     def add_hook(self, hook):
-        self._hooks.append(hook(self))
+        hook.set_deployinator(self)
+        self._hooks.append(hook)
 
     def dispatch_hook(self, name):
         for hook in self._hooks:
@@ -102,7 +103,7 @@ class Deployinator(object):
 
 
 class BaseHook(object):
-    def __init__(self, deployinator):
+    def set_deployinator(self, deployinator):
         self.deployinator = deployinator
 
     def __getattr__(self, name):
