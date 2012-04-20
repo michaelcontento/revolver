@@ -19,7 +19,30 @@ def test_is_running(sudo):
 
 
 @patch("revolver.core.sudo")
-def test_command(sudo):
+@patch("revolver.file.exists")
+def test_command(sudo, exists):
+    exists.expects_call().returns(False).next_call().returns(True)
+    sudo.expects_call().with_args("/etc/init.d/foo method")
+    service.command("foo", "method")
+
+
+@patch("revolver.core.sudo")
+@patch("revolver.file.exists")
+def test_command_upstart(sudo, exists):
+    exists.expects_call().with_args("/etc/init/foo.conf").returns(True)
+    sudo.expects_call().with_args("method foo")
+    service.command("foo", "method")
+
+
+@patch("revolver.core.sudo")
+@patch("revolver.file.exists")
+def test_command_initd(sudo, exists):
+    (exists
+        .expects_call()
+            .returns(False)
+        .next_call()
+            .with_args("/etc/init.d/foo")
+            .returns(True))
     sudo.expects_call().with_args("/etc/init.d/foo method")
     service.command("foo", "method")
 
