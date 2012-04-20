@@ -78,7 +78,8 @@ class Deployinator(object):
                 if type != "current":
                     dir.create(path, recursive=True)
             else:
-                dir.attributes(path, owner=current_user, recursive=True)
+                with ctx.sudo():
+                    dir.attributes(path, owner=current_user, recursive=True)
 
     def _upload(self):
         # TODO Warn if there are local changes
