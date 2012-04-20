@@ -36,20 +36,23 @@ class Deployinator(object):
             self._layout()
             self.dispatch_hook("after_layout")
 
-            self.dispatch_hook("before_upload")
-            self._upload()
-            self.dispatch_hook("after_upload")
+            with ctx.cd(self.folders["releases.current"]):
+                self.dispatch_hook("before_upload")
+                self._upload()
+                self.dispatch_hook("after_upload")
 
-            self.dispatch_hook("before_cleanup")
-            self._cleanup()
-            self.dispatch_hook("after_cleanup")
+                self.dispatch_hook("before_cleanup")
+                self._cleanup()
+                self.dispatch_hook("after_cleanup")
 
-            self.dispatch_hook("before_activate")
-            self._activate()
+                self.dispatch_hook("before_activate")
+                self._activate()
         except:
             dir.remove(self.folders["releases.current"], recursive=True)
             raise
-        self.dispatch_hook("after_activate")
+
+        with ctx.cd(self.folders["releases.current"]):
+            self.dispatch_hook("after_activate")
 
     def _init_folders(self):
         project = posixpath.join(self.cwd, self.name)
@@ -82,15 +85,12 @@ class Deployinator(object):
         tmp_tar = git.create_archive(self.revision)
 
         try:
-            with ctx.cd(self.folders["releases.current"]):
-                core.put(tmp_tar, "deploy.tar.gz")
-                core.run("tar -xzf deploy.tar.gz")
-                file.remove("deploy.tar.gz")
+            core.put(tmp_tar, "deploy.tar.gz")
+            core.run("tar -xzf deploy.tar.gz")
+            file.remove("deploy.tar.gz")
 
-                # TODO Fix file.write(). Sometimes the temp-file workaround of
-                #      Fabric seems to be broken. Uncomment the following line
-                #      after everything is fixed.
-                # file.write("VERSION", git.revparse(self.revision))
+            with ctx.unpatched_state():
+              file.write("VERSION", git.revparse(self.revision))
         finally:
             core.local("rm -rf %s" % tmp_tar)
 
