@@ -19,7 +19,14 @@ def install():
         dir.create("versions")
         dir.create("tmp")
 
+    _ensure_autoload(".bashrc")
+    _ensure_autoload(".zshrc")
+
 
 def ensure():
     if not dir.exists(".php-build"):
         install()
+
+
+def _ensure_autoload(filename):
+    file.append(filename, 'export PATH="$HOME/.php-build/bin:$PATH"')
