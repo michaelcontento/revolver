@@ -30,6 +30,7 @@ class Deployinator(object):
                 method()
 
     def run(self):
+        self.dispatch_hook("init")
         self.dispatch_hook("before_layout")
         try:
             self._layout()
