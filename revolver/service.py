@@ -12,8 +12,9 @@ def add_upstart(name, content):
 
     upstart_file = "/etc/init/%s.conf" % name
 
-    with ctx.sudo(), ctx.unpatched_state():
-        file.write(upstart_file, content)
+    with ctx.sudo():
+        with ctx.unpatched_state():
+            file.write(upstart_file, content)
 
 
 def command(name, command):
