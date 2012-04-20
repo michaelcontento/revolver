@@ -3,11 +3,30 @@
 from __future__ import absolute_import, division, with_statement
 
 from revolver import contextmanager as ctx
-from revolver import core
+from revolver import core, file
+
+
+def add_upstart(name, content):
+    if name.endswith(".conf"):
+        name = name[:-5]
+
+    upstart_file = "/etc/init/%s.conf" % name
+
+    with ctx.sudo(), ctx.unpatched_state():
+        file.write(upstart_file, content)
 
 
 def command(name, command):
-    cmd = "/etc/init.d/%s %s" % (name, command)
+    initd_file = "/etc/init.d/%s" % name
+    upstart_file = "/etc/init/%s.conf" % name
+
+    if file.exists(upstart_file):
+        cmd = "%s %s" % (command, name)
+    elif file.exists(initd_file):
+        cmd = "%s %s" % (initd_file, command)
+    else:
+        cmd = "false"
+
     core.sudo(cmd)
 
 
