@@ -91,7 +91,7 @@ class Deployinator(object):
             file.remove("deploy.tar.gz")
 
             with ctx.unpatched_state():
-              file.write("VERSION", git.revparse(self.revision))
+                file.write("VERSION", git.revparse(self.revision))
         finally:
             core.local("rm -rf %s" % tmp_tar)
 
