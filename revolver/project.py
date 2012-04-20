@@ -7,7 +7,7 @@ import posixpath
 
 from revolver import contextmanager as ctx
 from revolver import directory as dir
-from revolver import file, git, core, command
+from revolver import file, git, core, command, service
 
 
 class Deployinator(object):
@@ -112,6 +112,57 @@ class BaseHook(object):
         if name.startswith("on_"):
             return None
         return getattr(self.deployinator, name)
+
+
+class UnicornUpstartHook(BaseHook):
+    _template = """\
+description "Unicorn application server for {name}"
+author "Revolver UnicornUpstartHook"
+version "1.0"
+
+start on runlevel [2]
+stop  on runlevel [016]
+
+console owner
+
+exec sudo\\
+  -u {user}\\
+  -i /bin/bash -i\\
+  -c "unicorn\\
+    -E production\\
+    -c  {folders[current]}/config/unicorn.rb\\
+     >> {folders[shared.logs]}/unicorn.stdout.log\\
+    2>> {folders[shared.logs]}/unicorn.stderr.log"
+
+"""
+
+    def on_init(self):
+        self._service = "unicorn-" + self.name
+
+    def on_before_activate(self):
+        values = {
+            "folders": self.folders,
+            "name": self.name,
+            "user": core.run("echo $USER").stdout
+        }
+        content = self._template.format(**values)
+        service.add_upstart(self._service, content)
+
+    def on_after_activate(self):
+        service.restart(self._service)
+
+
+class SharedDirectoriesHook(BaseHook):
+    def __init__(self, shares):
+        self._shares = shares
+
+    def on_after_upload(self):
+        for src, dst in self._shares:
+            dst = dst % self.folders
+
+            dir.ensure(posixpath.dirname(src), recursive=True)
+            dir.ensure(dst, recursive=True)
+            file.link(dst, src)
 
 
 class AutoDependencyHook(BaseHook):
