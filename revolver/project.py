@@ -130,11 +130,14 @@ exec sudo\\
   -i /bin/bash -i\\
   -c "unicorn\\
     -E production\\
-    -c  {folders[current]}/config/unicorn.rb\\
+    -c  {folders[current]}/{config}\\
      >> {folders[shared.logs]}/unicorn.stdout.log\\
     2>> {folders[shared.logs]}/unicorn.stderr.log"
 
 """
+
+    def __init__(self, config):
+        self._config = config
 
     def on_init(self):
         self._service = "unicorn-" + self.name
@@ -143,7 +146,8 @@ exec sudo\\
         values = {
             "folders": self.folders,
             "name": self.name,
-            "user": core.run("echo $USER").stdout
+            "user": core.run("echo $USER").stdout,
+            "config": self._config
         }
         content = self._template.format(**values)
         service.add_upstart(self._service, content)
