@@ -126,7 +126,7 @@ stop  on runlevel [016]
 console owner
 
 exec sudo -u {user} -i {shell} -c "cd {folders[current]} &&\\
-  bundle exec unicorn -E {env} -c {config}"
+  bundle exec unicorn -E {env} -c {config} -D"
 """
 
     def __init__(self, config):
