@@ -28,7 +28,8 @@ def command(name, command):
     else:
         cmd = "false"
 
-    core.sudo(cmd)
+    with ctx.unpatched_state():
+        core.sudo(cmd)
 
 
 def start(name):
