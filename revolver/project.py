@@ -125,15 +125,8 @@ stop  on runlevel [016]
 
 console owner
 
-exec sudo\\
-  -u {user}\\
-  -i /bin/bash -i\\
-  -c "unicorn\\
-    -E production\\
-    -c  {folders[current]}/{config}\\
-     >> {folders[shared.logs]}/unicorn.stdout.log\\
-    2>> {folders[shared.logs]}/unicorn.stderr.log"
-
+exec sudo -u {user} -i {shell} -c "cd {folders[current]} &&\\
+  bundle exec unicorn -E {env} -c {config}"
 """
 
     def __init__(self, config):
@@ -143,11 +136,15 @@ exec sudo\\
         self._service = "unicorn-" + self.name
 
     def on_before_activate(self):
+        # TODO: Use shell from the current user
+        # TODO: Allow changes to the used environment
         values = {
             "folders": self.folders,
             "name": self.name,
             "user": core.run("echo $USER").stdout,
-            "config": self._config
+            "config": self._config,
+            "env": "production",
+            "shell": "/bin/bash -i"
         }
         content = self._template.format(**values)
         service.add_upstart(self._service, content)
