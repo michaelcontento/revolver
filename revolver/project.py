@@ -162,6 +162,7 @@ class SharedDirectoriesHook(BaseHook):
             dst = dst % self.folders
 
             dir.ensure(posixpath.dirname(src), recursive=True)
+            dir.remove(src, recursive=True)
             dir.ensure(dst, recursive=True)
             file.link(dst, src)
 
