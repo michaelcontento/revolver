@@ -37,7 +37,7 @@ def multiargs(func):
 def inject_use_sudo(func):
     @wraps(func)
     def inject_wrapper(*args, **kwargs):
-        func_args = func.func_code.co_varnames
+        func_args = func.func_code.co_varnames[:func.func_code.co_argcount]
 
         # Fabric
         if "use_sudo" not in kwargs and "use_sudo" in func_args:
