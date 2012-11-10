@@ -18,7 +18,7 @@ def is_running():
         command = "vagrant status | egrep -o 'running$'"
         vm_running = core.local(command, capture=True)
 
-    if vm_running == None or vm_running == "":
+    if vm_running is None or vm_running == "":
         return False
 
     return True

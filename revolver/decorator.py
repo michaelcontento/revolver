@@ -5,7 +5,7 @@ from __future__ import absolute_import, division, with_statement
 from functools import wraps
 
 from fabric.decorators import (task, hosts, roles, runs_once, serial,
-    parallel, with_settings)
+                               parallel, with_settings)
 from fabric.network import needs_host
 
 from revolver.core import env

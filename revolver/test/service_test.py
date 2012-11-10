@@ -39,10 +39,10 @@ def test_command_upstart(sudo, exists):
 def test_command_initd(sudo, exists):
     (exists
         .expects_call()
-            .returns(False)
+        .returns(False)
         .next_call()
-            .with_args("/etc/init.d/foo")
-            .returns(True))
+        .with_args("/etc/init.d/foo")
+        .returns(True))
     sudo.expects_call().with_args("/etc/init.d/foo method")
     service.command("foo", "method")
 

@@ -2,9 +2,9 @@
 
 from __future__ import absolute_import, division, with_statement
 
-from cuisine import package_ensure  as ensure
+from cuisine import package_ensure as ensure
 from cuisine import package_install as install
-from cuisine import package_update  as update
+from cuisine import package_update as update
 from cuisine import package_upgrade as upgrade
 
 from revolver import contextmanager as ctx

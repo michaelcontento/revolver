@@ -19,7 +19,7 @@ def test_revolver_is_just_a_wrapper():
 
 def test_environment_default_values():
     assert not core.env.sudo_forced
-    assert core.env.sudo_user == None
+    assert core.env.sudo_user is None
 
 
 def test_patch_fabric_api():

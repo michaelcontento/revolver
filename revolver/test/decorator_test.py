@@ -55,7 +55,7 @@ def _sudo_dummy(sudo=None):
 
 
 def test_sudo_dummy():
-    assert _sudo_dummy() == None
+    assert _sudo_dummy() is None
     assert _sudo_dummy(True)
     assert not _sudo_dummy(False)
 
@@ -75,7 +75,7 @@ def _use_sudo_dummy(use_sudo=None):
 
 
 def test_sudo_dummy():
-    assert _use_sudo_dummy() == None
+    assert _use_sudo_dummy() is None
     assert _use_sudo_dummy(True)
     assert not _use_sudo_dummy(False)
 
@@ -94,6 +94,6 @@ def test_sudo():
     # TODO Properly mock/assert the used context
     def checker():
         assert core.env.sudo_forced
-        assert core.env.sudo_user == None
+        assert core.env.sudo_user is None
 
     decorator.sudo(checker)()

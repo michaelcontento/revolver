@@ -18,7 +18,7 @@ def _get_with_abort(username):
 
 
 def exists(username):
-    if get(username) == None:
+    if get(username) is None:
         return False
 
     return True

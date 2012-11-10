@@ -98,7 +98,7 @@ class Deployinator(object):
     def _cleanup(self):
         with ctx.cd(self.folders["releases"]):
             core.run("ls -1 | sort -V | head -n-%s | xargs -l1 rm -rf"
-                % self.releases_to_keep)
+                     % self.releases_to_keep)
 
     def _activate(self):
         file.link(self.folders["releases.current"], self.folders["current"])
