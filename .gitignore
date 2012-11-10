@@ -3,3 +3,4 @@ build/
 revolver.egg-info/
 cover/
 .coverage
+dist/
